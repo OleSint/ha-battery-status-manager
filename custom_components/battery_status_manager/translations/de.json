@@ -46,7 +46,13 @@
         "description": "Wähle aus, über welche Kanäle benachrichtigt werden soll.",
         "data": {
           "notification_services": "Benachrichtigungsdienste",
-          "notification_title": "Betreff / Titel der Benachrichtigung"
+          "notification_title": "Betreff / Titel der Benachrichtigung",
+          "enable_time_window": "Nur in einem bestimmten Zeitfenster benachrichtigen",
+          "time_window_start": "Beginn des Zeitfensters",
+          "time_window_end": "Ende des Zeitfensters",
+          "active_days": "Aktive Wochentage",
+          "enable_reminder": "Erinnerung senden, falls Batteriestand weiterhin unter Schwellenwert",
+          "reminder_interval": "Erinnerungsintervall"
         }
       }
     },
