@@ -1,0 +1,120 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Monitoring Scope",
+        "description": "Choose which batteries should be monitored.",
+        "data": {
+          "scope": "Monitoring scope"
+        },
+        "data_description": {
+          "scope": "Monitor all batteries, select by device, or select individual entities."
+        }
+      },
+      "select_devices": {
+        "title": "Select Devices",
+        "description": "Select the devices whose batteries should be monitored.",
+        "data": {
+          "monitored_devices": "Devices"
+        }
+      },
+      "select_entities": {
+        "title": "Select Entities",
+        "description": "Select the battery entities to monitor. All are pre-selected by default.",
+        "data": {
+          "monitored_entities": "Entities"
+        }
+      },
+      "thresholds": {
+        "title": "Configure Thresholds",
+        "description": "Define when a notification should be sent.",
+        "data": {
+          "enable_low_battery_notification": "Enable low battery notification",
+          "low_battery_threshold": "Low battery threshold (notify when below)",
+          "enable_drop_notification": "Enable rapid drain notification",
+          "drop_threshold": "Drain threshold",
+          "drop_timeframe": "Observation window"
+        },
+        "data_description": {
+          "low_battery_threshold": "Send a notification when the battery level falls below this value.",
+          "drop_threshold": "Send a notification when the battery level drops by at least this amount.",
+          "drop_timeframe": "Time window in hours over which the battery drop is measured."
+        }
+      },
+      "notifications": {
+        "title": "Notifications",
+        "description": "Choose which notification channels to use.",
+        "data": {
+          "notification_services": "Notification services",
+          "notification_title": "Notification title"
+        }
+      }
+    },
+    "error": {
+      "no_selection": "Please select at least one entry."
+    },
+    "abort": {
+      "already_configured": "Battery Status Manager is already configured.",
+      "no_battery_entities": "No battery entities were found in Home Assistant.",
+      "no_battery_devices": "No devices with battery entities were found.",
+      "no_notification_services": "No notification services found. Please set up a notification service (e.g. notify) first."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Monitoring Scope",
+        "description": "Choose which batteries should be monitored.",
+        "data": {
+          "scope": "Monitoring scope"
+        }
+      },
+      "select_devices": {
+        "title": "Select Devices",
+        "description": "Select the devices whose batteries should be monitored.",
+        "data": {
+          "monitored_devices": "Devices"
+        }
+      },
+      "select_entities": {
+        "title": "Select Entities",
+        "description": "Select the battery entities to monitor.",
+        "data": {
+          "monitored_entities": "Entities"
+        }
+      },
+      "thresholds": {
+        "title": "Configure Thresholds",
+        "description": "Define when a notification should be sent.",
+        "data": {
+          "enable_low_battery_notification": "Enable low battery notification",
+          "low_battery_threshold": "Low battery threshold (notify when below)",
+          "enable_drop_notification": "Enable rapid drain notification",
+          "drop_threshold": "Drain threshold",
+          "drop_timeframe": "Observation window"
+        },
+        "data_description": {
+          "low_battery_threshold": "Send a notification when the battery level falls below this value.",
+          "drop_threshold": "Send a notification when the battery level drops by at least this amount.",
+          "drop_timeframe": "Time window in hours over which the battery drop is measured."
+        }
+      },
+      "notifications": {
+        "title": "Notifications",
+        "description": "Choose which notification channels to use.",
+        "data": {
+          "notification_services": "Notification services",
+          "notification_title": "Notification title"
+        }
+      }
+    },
+    "error": {
+      "no_selection": "Please select at least one entry."
+    },
+    "abort": {
+      "no_battery_entities": "No battery entities found.",
+      "no_battery_devices": "No devices with battery entities found.",
+      "no_notification_services": "No notification services found."
+    }
+  }
+}
