@@ -110,7 +110,13 @@
         "description": "Choose which notification channels to use.",
         "data": {
           "notification_services": "Notification services",
-          "notification_title": "Notification title"
+          "notification_title": "Notification title",
+          "enable_time_window": "Only send notifications within a specific time window",
+          "time_window_start": "Time window start",
+          "time_window_end": "Time window end",
+          "active_days": "Active days of the week",
+          "enable_reminder": "Send reminder if battery is still below threshold",
+          "reminder_interval": "Reminder interval"
         }
       }
     },
