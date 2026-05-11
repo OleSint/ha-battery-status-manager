@@ -13,6 +13,9 @@ Eine HACS-Integration für Home Assistant, die Batteriezustände überwacht und 
 - **Flexible Überwachung**: Alle Batterieentitäten, Auswahl nach Gerät oder Auswahl nach einzelnen Entitäten
 - **Schwellenwert-Benachrichtigungen**: Benachrichtigung, wenn ein Akku unter einen konfigurierbaren Schwellenwert fällt (z. B. unter 20%)
 - **Verlustrate-Benachrichtigungen**: Benachrichtigung, wenn ein Akku innerhalb eines konfigurierbaren Zeitraums stark entladen wird (z. B. mehr als 20% in 24 Stunden)
+- **Erinnerungsfunktion**: Automatische Erinnerung, falls ein Akku weiterhin unter dem Schwellenwert liegt – damit nichts vergessen wird (Opt-In, konfigurierbares Intervall)
+- **Zeitfenster**: Benachrichtigungen nur innerhalb einer konfigurierbaren Uhrzeit senden (z. B. 08:00–20:00), inkl. Übernacht-Fenster
+- **Wochentage**: Frei wählbar, an welchen Wochentagen Benachrichtigungen gesendet werden sollen
 - **Alle HA-Benachrichtigungsdienste**: Unterstützung aller in Home Assistant konfigurierten `notify`-Dienste
 - **Persistenz**: Verlaufs- und Benachrichtigungsdaten werden über Neustarts hinweg gespeichert
 - **Nachkonfigurierbar**: Einstellungen können jederzeit über die Integrationsseite angepasst werden
@@ -42,9 +45,13 @@ Der Setup-Assistent führt durch vier Schritte:
 - **Niedrig-Schwellenwert**: Benachrichtigung, wenn Ladestand unter diesen Wert fällt (Standard: 20%)
 - **Verlustrate-Erkennung**: Benachrichtigung, wenn Ladestand um mehr als X% in Y Stunden sinkt (Standard: 20% in 24 h, Zeitfenster bis 168 h konfigurierbar)
 
-#### 3. Benachrichtigungsdienste
+#### 3. Benachrichtigungen
 
-Alle konfigurierten `notify.*`-Dienste sind als Mehrfachauswahl verfügbar. Der Benachrichtigungstitel ist frei anpassbar.
+- **Benachrichtigungsdienste**: Alle konfigurierten `notify.*`-Dienste als Mehrfachauswahl
+- **Titel**: Frei anpassbarer Betreff der Benachrichtigung
+- **Zeitfenster**: Optional – Benachrichtigungen nur zwischen zwei Uhrzeiten senden (Übernacht-Fenster wie 22:00–06:00 werden unterstützt)
+- **Wochentage**: Optional – Benachrichtigungen nur an bestimmten Tagen senden (Standard: alle Tage)
+- **Erinnerung**: Optional – erneute Benachrichtigung, wenn der Ladestand nach X Stunden immer noch unter dem Schwellenwert liegt (Standard: 24 h)
 
 ### Benachrichtigungsbeispiele
 
@@ -57,6 +64,8 @@ Alle konfigurierten `notify.*`-Dienste sind als Mehrfachauswahl verfügbar. Der 
 
 - Batteriezustände werden **stündlich** geprüft
 - Niedrig-Benachrichtigungen haben eine **Hysterese von 5%**: nach dem Versenden wird die Benachrichtigung erst zurückgesetzt, wenn der Ladestand wieder auf `Schwellenwert + 5%` steigt
+- **Erinnerungen** werden nur gesendet, wenn die Batterie noch immer unter dem Schwellenwert liegt – nach Erholung startet der Zähler zurück
+- Benachrichtigungen außerhalb des konfigurierten Zeitfensters oder an inaktiven Wochentagen werden **zurückgehalten** und beim nächsten erlaubten Check nachgeholt
 - Verlustrate-Benachrichtigungen haben einen **Cooldown** in Höhe des konfigurierten Zeitfensters
 - Die Integration ist **rein lesend** – sie kann nichts in deiner HA-Konfiguration verändern oder beschädigen
 
@@ -80,6 +89,9 @@ A HACS integration for Home Assistant that monitors battery levels across your d
 - **Flexible monitoring scope** — monitor all battery entities at once, select specific devices, or hand-pick individual entities
 - **Low battery alerts** — get notified when any battery drops below a configurable threshold (e.g. below 20%)
 - **Rapid drain detection** — get notified when a battery loses more than a defined percentage within a set time window (e.g. more than 20% within 24 hours)
+- **Reminder notifications** — optional daily (or custom interval) reminders if a battery remains below the threshold, so nothing gets forgotten
+- **Time window** — optionally restrict notifications to a specific time range (e.g. 08:00–20:00); overnight windows like 22:00–06:00 are supported
+- **Day-of-week filter** — choose which days of the week notifications are allowed (all days enabled by default)
 - **All native HA notification services** — supports every `notify` service configured in your Home Assistant instance, with multi-select
 - **Persistent history** — battery level history and notification state survive restarts
 - **Fully reconfigurable** — all settings can be changed at any time via the integration's Configure button
@@ -110,9 +122,13 @@ The setup wizard guides you through four steps:
 - **Low battery threshold** — notification is sent when a battery falls below this value (default: 20%, slider 1–99%)
 - **Rapid drain detection** — enable to get notified when a battery drops by more than X% within Y hours (default: 20% in 24 h, window configurable up to 168 h)
 
-#### 3. Notification services
+#### 3. Notifications
 
-All configured `notify.*` services are available as a multi-select list. You can also set a custom notification title.
+- **Notification services** — all configured `notify.*` services available as a multi-select list
+- **Title** — customisable notification subject/title
+- **Time window** — optionally send notifications only between two times; overnight windows (e.g. 22:00–06:00) are supported
+- **Active days** — optionally restrict notifications to specific days of the week (default: all days)
+- **Reminder** — optionally resend the alert if the battery is still below threshold after X hours (default interval: 24 h)
 
 ### Notification examples
 
@@ -125,6 +141,8 @@ All configured `notify.*` services are available as a multi-select list. You can
 
 - Battery levels are checked **every hour**
 - Low battery notifications include a **5% hysteresis**: once sent, the notification resets only after the battery recovers above `threshold + 5%`, preventing notification spam during fluctuations
+- **Reminders** are only sent while the battery remains below the threshold — the counter resets on recovery
+- Notifications outside the configured time window or on inactive days are **held back** and delivered at the next permitted check
 - Rapid drain notifications respect a **cooldown** equal to the configured time window before they can fire again for the same entity
 - The integration is **read-only** — it cannot break or modify anything in your HA setup
 
