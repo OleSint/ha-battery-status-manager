@@ -10,6 +10,12 @@ CONF_DROP_THRESHOLD = "drop_threshold"
 CONF_DROP_TIMEFRAME = "drop_timeframe"
 CONF_NOTIFICATION_SERVICES = "notification_services"
 CONF_NOTIFICATION_TITLE = "notification_title"
+CONF_ENABLE_TIME_WINDOW = "enable_time_window"
+CONF_TIME_WINDOW_START = "time_window_start"
+CONF_TIME_WINDOW_END = "time_window_end"
+CONF_ACTIVE_DAYS = "active_days"
+CONF_ENABLE_REMINDER = "enable_reminder"
+CONF_REMINDER_INTERVAL = "reminder_interval"
 
 SCOPE_ALL = "all"
 SCOPE_BY_DEVICE = "by_device"
@@ -21,6 +27,15 @@ DEFAULT_ENABLE_DROP = False
 DEFAULT_DROP_THRESHOLD = 20
 DEFAULT_DROP_TIMEFRAME = 24
 DEFAULT_NOTIFICATION_TITLE = "Battery Status Manager"
+DEFAULT_ENABLE_TIME_WINDOW = False
+DEFAULT_TIME_WINDOW_START = "08:00:00"
+DEFAULT_TIME_WINDOW_END = "20:00:00"
+DEFAULT_ACTIVE_DAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
+DEFAULT_ENABLE_REMINDER = False
+DEFAULT_REMINDER_INTERVAL = 24
+
+# Ordered Monday → Sunday (matches Python's datetime.weekday())
+DAY_KEYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
 DEFAULT_SCAN_INTERVAL = 3600
 
 STORAGE_KEY = "battery_status_manager"

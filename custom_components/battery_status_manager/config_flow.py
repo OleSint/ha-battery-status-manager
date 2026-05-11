@@ -19,25 +19,38 @@ from homeassistant.helpers.selector import (
     TextSelector,
     TextSelectorConfig,
     TextSelectorType,
+    TimeSelector,
 )
 
 from .const import (
+    CONF_ACTIVE_DAYS,
     CONF_DROP_THRESHOLD,
     CONF_DROP_TIMEFRAME,
     CONF_ENABLE_DROP_NOTIFICATION,
     CONF_ENABLE_LOW_BATTERY_NOTIFICATION,
+    CONF_ENABLE_REMINDER,
+    CONF_ENABLE_TIME_WINDOW,
     CONF_LOW_BATTERY_THRESHOLD,
     CONF_MONITORED_DEVICES,
     CONF_MONITORED_ENTITIES,
     CONF_NOTIFICATION_SERVICES,
     CONF_NOTIFICATION_TITLE,
+    CONF_REMINDER_INTERVAL,
     CONF_SCOPE,
+    CONF_TIME_WINDOW_END,
+    CONF_TIME_WINDOW_START,
+    DEFAULT_ACTIVE_DAYS,
     DEFAULT_DROP_THRESHOLD,
     DEFAULT_DROP_TIMEFRAME,
     DEFAULT_ENABLE_DROP,
     DEFAULT_ENABLE_LOW_BATTERY,
+    DEFAULT_ENABLE_REMINDER,
+    DEFAULT_ENABLE_TIME_WINDOW,
     DEFAULT_LOW_BATTERY_THRESHOLD,
     DEFAULT_NOTIFICATION_TITLE,
+    DEFAULT_REMINDER_INTERVAL,
+    DEFAULT_TIME_WINDOW_END,
+    DEFAULT_TIME_WINDOW_START,
     DOMAIN,
     SCOPE_ALL,
     SCOPE_BY_DEVICE,
@@ -196,6 +209,46 @@ def _notifications_schema(
             CONF_NOTIFICATION_TITLE,
             default=data.get(CONF_NOTIFICATION_TITLE, DEFAULT_NOTIFICATION_TITLE),
         ): TextSelector(TextSelectorConfig(type=TextSelectorType.TEXT)),
+        vol.Required(
+            CONF_ENABLE_TIME_WINDOW,
+            default=data.get(CONF_ENABLE_TIME_WINDOW, DEFAULT_ENABLE_TIME_WINDOW),
+        ): BooleanSelector(),
+        vol.Optional(
+            CONF_TIME_WINDOW_START,
+            default=data.get(CONF_TIME_WINDOW_START, DEFAULT_TIME_WINDOW_START),
+        ): TimeSelector(),
+        vol.Optional(
+            CONF_TIME_WINDOW_END,
+            default=data.get(CONF_TIME_WINDOW_END, DEFAULT_TIME_WINDOW_END),
+        ): TimeSelector(),
+        vol.Required(
+            CONF_ACTIVE_DAYS,
+            default=data.get(CONF_ACTIVE_DAYS, DEFAULT_ACTIVE_DAYS),
+        ): SelectSelector(SelectSelectorConfig(
+            options=[
+                {"value": "mon", "label": "Monday"},
+                {"value": "tue", "label": "Tuesday"},
+                {"value": "wed", "label": "Wednesday"},
+                {"value": "thu", "label": "Thursday"},
+                {"value": "fri", "label": "Friday"},
+                {"value": "sat", "label": "Saturday"},
+                {"value": "sun", "label": "Sunday"},
+            ],
+            multiple=True,
+            mode=SelectSelectorMode.LIST,
+        )),
+        vol.Required(
+            CONF_ENABLE_REMINDER,
+            default=data.get(CONF_ENABLE_REMINDER, DEFAULT_ENABLE_REMINDER),
+        ): BooleanSelector(),
+        vol.Optional(
+            CONF_REMINDER_INTERVAL,
+            default=data.get(CONF_REMINDER_INTERVAL, DEFAULT_REMINDER_INTERVAL),
+        ): NumberSelector(NumberSelectorConfig(
+            min=1, max=168, step=1,
+            mode=NumberSelectorMode.BOX,
+            unit_of_measurement="h",
+        )),
     })
 
 
