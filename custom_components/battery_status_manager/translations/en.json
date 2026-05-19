@@ -11,6 +11,13 @@
           "scope": "Monitor all batteries, select by device, or select individual entities."
         }
       },
+      "exclude_entities": {
+        "title": "Exclude Entities",
+        "description": "Select battery entities that should **not** be monitored. Leave empty to monitor all.",
+        "data": {
+          "excluded_entities": "Excluded entities"
+        }
+      },
       "select_devices": {
         "title": "Select Devices",
         "description": "Select the devices whose batteries should be monitored.",
@@ -29,14 +36,17 @@
         "title": "Configure Thresholds",
         "description": "Define when a notification should be sent.",
         "data": {
-          "enable_low_battery_notification": "Enable low battery notification",
-          "low_battery_threshold": "Low battery threshold (notify when below)",
+          "enable_low_battery_notification": "Enable low battery warning",
+          "low_battery_threshold": "Warning threshold (%)",
+          "enable_critical_notification": "Enable critical battery alert",
+          "critical_threshold": "Critical threshold (%)",
           "enable_drop_notification": "Enable rapid drain notification",
-          "drop_threshold": "Drain threshold",
-          "drop_timeframe": "Observation window"
+          "drop_threshold": "Drain threshold (%)",
+          "drop_timeframe": "Observation window (hours)"
         },
         "data_description": {
-          "low_battery_threshold": "Send a notification when the battery level falls below this value.",
+          "low_battery_threshold": "Send a warning (⚠️) when the battery level falls below this value.",
+          "critical_threshold": "Send a critical alert (🚨) when the battery level falls below this value. Must be lower than the warning threshold.",
           "drop_threshold": "Send a notification when the battery level drops by at least this amount.",
           "drop_timeframe": "Time window in hours over which the battery drop is measured."
         }
@@ -52,7 +62,15 @@
           "time_window_end": "Time window end",
           "active_days": "Active days of the week",
           "enable_reminder": "Send reminder if battery is still below threshold",
-          "reminder_interval": "Reminder interval"
+          "reminder_interval": "Reminder interval (hours)",
+          "enable_weekly_report": "Enable weekly summary report",
+          "weekly_report_day": "Day of week for report",
+          "weekly_report_time": "Time for report"
+        },
+        "data_description": {
+          "reminder_interval": "How many hours to wait between reminders.",
+          "enable_weekly_report": "Sends a weekly summary of all monitored batteries once per week.",
+          "weekly_report_time": "Time of day at which the weekly report is sent."
         }
       }
     },
@@ -75,6 +93,13 @@
           "scope": "Monitoring scope"
         }
       },
+      "exclude_entities": {
+        "title": "Exclude Entities",
+        "description": "Select battery entities that should **not** be monitored. Leave empty to monitor all.",
+        "data": {
+          "excluded_entities": "Excluded entities"
+        }
+      },
       "select_devices": {
         "title": "Select Devices",
         "description": "Select the devices whose batteries should be monitored.",
@@ -93,14 +118,17 @@
         "title": "Configure Thresholds",
         "description": "Define when a notification should be sent.",
         "data": {
-          "enable_low_battery_notification": "Enable low battery notification",
-          "low_battery_threshold": "Low battery threshold (notify when below)",
+          "enable_low_battery_notification": "Enable low battery warning",
+          "low_battery_threshold": "Warning threshold (%)",
+          "enable_critical_notification": "Enable critical battery alert",
+          "critical_threshold": "Critical threshold (%)",
           "enable_drop_notification": "Enable rapid drain notification",
-          "drop_threshold": "Drain threshold",
-          "drop_timeframe": "Observation window"
+          "drop_threshold": "Drain threshold (%)",
+          "drop_timeframe": "Observation window (hours)"
         },
         "data_description": {
-          "low_battery_threshold": "Send a notification when the battery level falls below this value.",
+          "low_battery_threshold": "Send a warning (⚠️) when the battery level falls below this value.",
+          "critical_threshold": "Send a critical alert (🚨) when the battery level falls below this value. Must be lower than the warning threshold.",
           "drop_threshold": "Send a notification when the battery level drops by at least this amount.",
           "drop_timeframe": "Time window in hours over which the battery drop is measured."
         }
@@ -116,7 +144,15 @@
           "time_window_end": "Time window end",
           "active_days": "Active days of the week",
           "enable_reminder": "Send reminder if battery is still below threshold",
-          "reminder_interval": "Reminder interval"
+          "reminder_interval": "Reminder interval (hours)",
+          "enable_weekly_report": "Enable weekly summary report",
+          "weekly_report_day": "Day of week for report",
+          "weekly_report_time": "Time for report"
+        },
+        "data_description": {
+          "reminder_interval": "How many hours to wait between reminders.",
+          "enable_weekly_report": "Sends a weekly summary of all monitored batteries once per week.",
+          "weekly_report_time": "Time of day at which the weekly report is sent."
         }
       }
     },

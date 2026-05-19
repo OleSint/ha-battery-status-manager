@@ -1,7 +1,7 @@
 {
   "domain": "battery_status_manager",
   "name": "HA - Battery Status Manager",
-  "version": "0.0.4",
+  "version": "0.5",
   "config_flow": true,
   "documentation": "https://github.com/OleSint/ha-battery-status-manager",
   "issue_tracker": "https://github.com/OleSint/ha-battery-status-manager/issues",

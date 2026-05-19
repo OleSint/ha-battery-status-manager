@@ -11,6 +11,13 @@
           "scope": "Alle Batterien, Auswahl nach Gerät oder Auswahl nach einzelnen Entitäten."
         }
       },
+      "exclude_entities": {
+        "title": "Entitäten ausschließen",
+        "description": "Wähle Batterieentitäten aus, die **nicht** überwacht werden sollen. Leer lassen, um alle zu überwachen.",
+        "data": {
+          "excluded_entities": "Ausgeschlossene Entitäten"
+        }
+      },
       "select_devices": {
         "title": "Geräte auswählen",
         "description": "Wähle die Geräte aus, deren Batterien überwacht werden sollen.",
@@ -29,16 +36,19 @@
         "title": "Schwellenwerte konfigurieren",
         "description": "Lege fest, ab wann eine Benachrichtigung gesendet werden soll.",
         "data": {
-          "enable_low_battery_notification": "Benachrichtigung bei niedrigem Ladestand aktivieren",
-          "low_battery_threshold": "Schwellenwert (Benachrichtigung wenn darunter)",
+          "enable_low_battery_notification": "Warnung bei niedrigem Ladestand aktivieren",
+          "low_battery_threshold": "Warn-Schwellenwert (%)",
+          "enable_critical_notification": "Kritische Benachrichtigung aktivieren",
+          "critical_threshold": "Kritischer Schwellenwert (%)",
           "enable_drop_notification": "Benachrichtigung bei starkem Ladestandsverlust aktivieren",
-          "drop_threshold": "Verlust-Schwellenwert",
-          "drop_timeframe": "Beobachtungszeitraum"
+          "drop_threshold": "Verlust-Schwellenwert (%)",
+          "drop_timeframe": "Beobachtungszeitraum (Stunden)"
         },
         "data_description": {
-          "low_battery_threshold": "Benachrichtigung, wenn der Ladestand unter diesen Wert fällt.",
+          "low_battery_threshold": "Warnung (⚠️), wenn der Ladestand unter diesen Wert fällt.",
+          "critical_threshold": "Kritische Meldung (🚨), wenn der Ladestand diesen Wert unterschreitet. Muss kleiner als der Warn-Schwellenwert sein.",
           "drop_threshold": "Benachrichtigung, wenn der Ladestand um mindestens diesen Wert gesunken ist.",
-          "drop_timeframe": "Zeitraum in Stunden, innerhalb dem der Ladestandsverlust berechnet wird."
+          "drop_timeframe": "Zeitraum in Stunden, innerhalb dem der Ladestandsverlust gemessen wird."
         }
       },
       "notifications": {
@@ -52,7 +62,15 @@
           "time_window_end": "Ende des Zeitfensters",
           "active_days": "Aktive Wochentage",
           "enable_reminder": "Erinnerung senden, falls Batteriestand weiterhin unter Schwellenwert",
-          "reminder_interval": "Erinnerungsintervall"
+          "reminder_interval": "Erinnerungsintervall (Stunden)",
+          "enable_weekly_report": "Wöchentlichen Bericht aktivieren",
+          "weekly_report_day": "Wochentag für den Bericht",
+          "weekly_report_time": "Uhrzeit für den Bericht"
+        },
+        "data_description": {
+          "reminder_interval": "Wie viele Stunden zwischen Erinnerungen gewartet werden soll.",
+          "enable_weekly_report": "Sendet einmal pro Woche eine Zusammenfassung aller überwachten Batterien.",
+          "weekly_report_time": "Uhrzeit, zu der der Wochenbericht gesendet wird."
         }
       }
     },
@@ -75,6 +93,13 @@
           "scope": "Überwachungsbereich"
         }
       },
+      "exclude_entities": {
+        "title": "Entitäten ausschließen",
+        "description": "Wähle Batterieentitäten aus, die **nicht** überwacht werden sollen. Leer lassen, um alle zu überwachen.",
+        "data": {
+          "excluded_entities": "Ausgeschlossene Entitäten"
+        }
+      },
       "select_devices": {
         "title": "Geräte auswählen",
         "description": "Wähle die Geräte aus, deren Batterien überwacht werden sollen.",
@@ -93,16 +118,19 @@
         "title": "Schwellenwerte konfigurieren",
         "description": "Lege fest, ab wann eine Benachrichtigung gesendet werden soll.",
         "data": {
-          "enable_low_battery_notification": "Benachrichtigung bei niedrigem Ladestand aktivieren",
-          "low_battery_threshold": "Schwellenwert (Benachrichtigung wenn darunter)",
+          "enable_low_battery_notification": "Warnung bei niedrigem Ladestand aktivieren",
+          "low_battery_threshold": "Warn-Schwellenwert (%)",
+          "enable_critical_notification": "Kritische Benachrichtigung aktivieren",
+          "critical_threshold": "Kritischer Schwellenwert (%)",
           "enable_drop_notification": "Benachrichtigung bei starkem Ladestandsverlust aktivieren",
-          "drop_threshold": "Verlust-Schwellenwert",
-          "drop_timeframe": "Beobachtungszeitraum"
+          "drop_threshold": "Verlust-Schwellenwert (%)",
+          "drop_timeframe": "Beobachtungszeitraum (Stunden)"
         },
         "data_description": {
-          "low_battery_threshold": "Benachrichtigung, wenn der Ladestand unter diesen Wert fällt.",
+          "low_battery_threshold": "Warnung (⚠️), wenn der Ladestand unter diesen Wert fällt.",
+          "critical_threshold": "Kritische Meldung (🚨), wenn der Ladestand diesen Wert unterschreitet. Muss kleiner als der Warn-Schwellenwert sein.",
           "drop_threshold": "Benachrichtigung, wenn der Ladestand um mindestens diesen Wert gesunken ist.",
-          "drop_timeframe": "Zeitraum in Stunden, innerhalb dem der Ladestandsverlust berechnet wird."
+          "drop_timeframe": "Zeitraum in Stunden, innerhalb dem der Ladestandsverlust gemessen wird."
         }
       },
       "notifications": {
@@ -116,7 +144,15 @@
           "time_window_end": "Ende des Zeitfensters",
           "active_days": "Aktive Wochentage",
           "enable_reminder": "Erinnerung senden, falls Batteriestand weiterhin unter Schwellenwert",
-          "reminder_interval": "Erinnerungsintervall"
+          "reminder_interval": "Erinnerungsintervall (Stunden)",
+          "enable_weekly_report": "Wöchentlichen Bericht aktivieren",
+          "weekly_report_day": "Wochentag für den Bericht",
+          "weekly_report_time": "Uhrzeit für den Bericht"
+        },
+        "data_description": {
+          "reminder_interval": "Wie viele Stunden zwischen Erinnerungen gewartet werden soll.",
+          "enable_weekly_report": "Sendet einmal pro Woche eine Zusammenfassung aller überwachten Batterien.",
+          "weekly_report_time": "Uhrzeit, zu der der Wochenbericht gesendet wird."
         }
       }
     },

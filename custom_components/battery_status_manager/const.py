@@ -3,8 +3,11 @@ DOMAIN = "battery_status_manager"
 CONF_SCOPE = "scope"
 CONF_MONITORED_ENTITIES = "monitored_entities"
 CONF_MONITORED_DEVICES = "monitored_devices"
+CONF_EXCLUDED_ENTITIES = "excluded_entities"
 CONF_LOW_BATTERY_THRESHOLD = "low_battery_threshold"
 CONF_ENABLE_LOW_BATTERY_NOTIFICATION = "enable_low_battery_notification"
+CONF_ENABLE_CRITICAL_NOTIFICATION = "enable_critical_notification"
+CONF_CRITICAL_THRESHOLD = "critical_threshold"
 CONF_ENABLE_DROP_NOTIFICATION = "enable_drop_notification"
 CONF_DROP_THRESHOLD = "drop_threshold"
 CONF_DROP_TIMEFRAME = "drop_timeframe"
@@ -16,6 +19,9 @@ CONF_TIME_WINDOW_END = "time_window_end"
 CONF_ACTIVE_DAYS = "active_days"
 CONF_ENABLE_REMINDER = "enable_reminder"
 CONF_REMINDER_INTERVAL = "reminder_interval"
+CONF_ENABLE_WEEKLY_REPORT = "enable_weekly_report"
+CONF_WEEKLY_REPORT_DAY = "weekly_report_day"
+CONF_WEEKLY_REPORT_TIME = "weekly_report_time"
 
 SCOPE_ALL = "all"
 SCOPE_BY_DEVICE = "by_device"
@@ -23,6 +29,8 @@ SCOPE_BY_ENTITY = "by_entity"
 
 DEFAULT_LOW_BATTERY_THRESHOLD = 20
 DEFAULT_ENABLE_LOW_BATTERY = True
+DEFAULT_ENABLE_CRITICAL = False
+DEFAULT_CRITICAL_THRESHOLD = 10
 DEFAULT_ENABLE_DROP = False
 DEFAULT_DROP_THRESHOLD = 20
 DEFAULT_DROP_TIMEFRAME = 24
@@ -33,6 +41,9 @@ DEFAULT_TIME_WINDOW_END = "20:00:00"
 DEFAULT_ACTIVE_DAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
 DEFAULT_ENABLE_REMINDER = False
 DEFAULT_REMINDER_INTERVAL = 24
+DEFAULT_ENABLE_WEEKLY_REPORT = False
+DEFAULT_WEEKLY_REPORT_DAY = "mon"
+DEFAULT_WEEKLY_REPORT_TIME = "09:00:00"
 
 # Ordered Monday → Sunday (matches Python's datetime.weekday())
 DAY_KEYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
@@ -42,3 +53,7 @@ STORAGE_KEY = "battery_status_manager"
 STORAGE_VERSION = 1
 
 LOW_BATTERY_HYSTERESIS = 5
+CRITICAL_HYSTERESIS = 3
+MIN_FORECAST_HOURS = 2
+MIN_FORECAST_POINTS = 3
+MAX_FORECAST_DAYS = 365

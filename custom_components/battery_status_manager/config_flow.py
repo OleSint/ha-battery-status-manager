@@ -24,12 +24,16 @@ from homeassistant.helpers.selector import (
 
 from .const import (
     CONF_ACTIVE_DAYS,
+    CONF_CRITICAL_THRESHOLD,
     CONF_DROP_THRESHOLD,
     CONF_DROP_TIMEFRAME,
+    CONF_ENABLE_CRITICAL_NOTIFICATION,
     CONF_ENABLE_DROP_NOTIFICATION,
     CONF_ENABLE_LOW_BATTERY_NOTIFICATION,
     CONF_ENABLE_REMINDER,
     CONF_ENABLE_TIME_WINDOW,
+    CONF_ENABLE_WEEKLY_REPORT,
+    CONF_EXCLUDED_ENTITIES,
     CONF_LOW_BATTERY_THRESHOLD,
     CONF_MONITORED_DEVICES,
     CONF_MONITORED_ENTITIES,
@@ -39,18 +43,26 @@ from .const import (
     CONF_SCOPE,
     CONF_TIME_WINDOW_END,
     CONF_TIME_WINDOW_START,
+    CONF_WEEKLY_REPORT_DAY,
+    CONF_WEEKLY_REPORT_TIME,
+    DAY_KEYS,
     DEFAULT_ACTIVE_DAYS,
+    DEFAULT_CRITICAL_THRESHOLD,
     DEFAULT_DROP_THRESHOLD,
     DEFAULT_DROP_TIMEFRAME,
+    DEFAULT_ENABLE_CRITICAL,
     DEFAULT_ENABLE_DROP,
     DEFAULT_ENABLE_LOW_BATTERY,
     DEFAULT_ENABLE_REMINDER,
     DEFAULT_ENABLE_TIME_WINDOW,
+    DEFAULT_ENABLE_WEEKLY_REPORT,
     DEFAULT_LOW_BATTERY_THRESHOLD,
     DEFAULT_NOTIFICATION_TITLE,
     DEFAULT_REMINDER_INTERVAL,
     DEFAULT_TIME_WINDOW_END,
     DEFAULT_TIME_WINDOW_START,
+    DEFAULT_WEEKLY_REPORT_DAY,
+    DEFAULT_WEEKLY_REPORT_TIME,
     DOMAIN,
     SCOPE_ALL,
     SCOPE_BY_DEVICE,
@@ -58,6 +70,16 @@ from .const import (
 )
 
 _LOGGER = logging.getLogger(__name__)
+
+_DAY_OPTIONS = [
+    {"value": "mon", "label": "Monday"},
+    {"value": "tue", "label": "Tuesday"},
+    {"value": "wed", "label": "Wednesday"},
+    {"value": "thu", "label": "Thursday"},
+    {"value": "fri", "label": "Friday"},
+    {"value": "sat", "label": "Saturday"},
+    {"value": "sun", "label": "Sunday"},
+]
 
 # ---------------------------------------------------------------------------
 # Helper utilities
@@ -106,7 +128,7 @@ def _get_notification_services(hass: HomeAssistant) -> list[dict[str, str]]:
 
 
 # ---------------------------------------------------------------------------
-# Schema builders (shared by ConfigFlow and OptionsFlowHandler)
+# Schema builders
 # ---------------------------------------------------------------------------
 
 def _scope_schema(current: str = SCOPE_ALL) -> vol.Schema:
@@ -118,6 +140,21 @@ def _scope_schema(current: str = SCOPE_ALL) -> vol.Schema:
                     {"value": SCOPE_BY_DEVICE, "label": "Auswahl nach Gerät"},
                     {"value": SCOPE_BY_ENTITY, "label": "Auswahl nach Entität"},
                 ],
+                mode=SelectSelectorMode.LIST,
+            )
+        ),
+    })
+
+
+def _exclude_schema(
+    entity_options: list[dict[str, str]],
+    current: list[str] | None = None,
+) -> vol.Schema:
+    return vol.Schema({
+        vol.Optional(CONF_EXCLUDED_ENTITIES, default=current or []): SelectSelector(
+            SelectSelectorConfig(
+                options=entity_options,
+                multiple=True,
                 mode=SelectSelectorMode.LIST,
             )
         ),
@@ -164,6 +201,18 @@ def _thresholds_schema(data: dict[str, Any]) -> vol.Schema:
         vol.Required(
             CONF_LOW_BATTERY_THRESHOLD,
             default=data.get(CONF_LOW_BATTERY_THRESHOLD, DEFAULT_LOW_BATTERY_THRESHOLD),
+        ): NumberSelector(NumberSelectorConfig(
+            min=1, max=99, step=1,
+            mode=NumberSelectorMode.SLIDER,
+            unit_of_measurement="%",
+        )),
+        vol.Required(
+            CONF_ENABLE_CRITICAL_NOTIFICATION,
+            default=data.get(CONF_ENABLE_CRITICAL_NOTIFICATION, DEFAULT_ENABLE_CRITICAL),
+        ): BooleanSelector(),
+        vol.Optional(
+            CONF_CRITICAL_THRESHOLD,
+            default=data.get(CONF_CRITICAL_THRESHOLD, DEFAULT_CRITICAL_THRESHOLD),
         ): NumberSelector(NumberSelectorConfig(
             min=1, max=99, step=1,
             mode=NumberSelectorMode.SLIDER,
@@ -225,15 +274,7 @@ def _notifications_schema(
             CONF_ACTIVE_DAYS,
             default=data.get(CONF_ACTIVE_DAYS, DEFAULT_ACTIVE_DAYS),
         ): SelectSelector(SelectSelectorConfig(
-            options=[
-                {"value": "mon", "label": "Monday"},
-                {"value": "tue", "label": "Tuesday"},
-                {"value": "wed", "label": "Wednesday"},
-                {"value": "thu", "label": "Thursday"},
-                {"value": "fri", "label": "Friday"},
-                {"value": "sat", "label": "Saturday"},
-                {"value": "sun", "label": "Sunday"},
-            ],
+            options=_DAY_OPTIONS,
             multiple=True,
             mode=SelectSelectorMode.LIST,
         )),
@@ -249,6 +290,21 @@ def _notifications_schema(
             mode=NumberSelectorMode.BOX,
             unit_of_measurement="h",
         )),
+        vol.Required(
+            CONF_ENABLE_WEEKLY_REPORT,
+            default=data.get(CONF_ENABLE_WEEKLY_REPORT, DEFAULT_ENABLE_WEEKLY_REPORT),
+        ): BooleanSelector(),
+        vol.Optional(
+            CONF_WEEKLY_REPORT_DAY,
+            default=data.get(CONF_WEEKLY_REPORT_DAY, DEFAULT_WEEKLY_REPORT_DAY),
+        ): SelectSelector(SelectSelectorConfig(
+            options=_DAY_OPTIONS,
+            mode=SelectSelectorMode.LIST,
+        )),
+        vol.Optional(
+            CONF_WEEKLY_REPORT_TIME,
+            default=data.get(CONF_WEEKLY_REPORT_TIME, DEFAULT_WEEKLY_REPORT_TIME),
+        ): TimeSelector(),
     })
 
 
@@ -268,15 +324,30 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             self._data.update(user_input)
             scope = user_input[CONF_SCOPE]
+            if scope == SCOPE_ALL:
+                return await self.async_step_exclude_entities()
             if scope == SCOPE_BY_DEVICE:
                 return await self.async_step_select_devices()
-            if scope == SCOPE_BY_ENTITY:
-                return await self.async_step_select_entities()
-            return await self.async_step_thresholds()
+            return await self.async_step_select_entities()
 
         return self.async_show_form(
             step_id="user",
             data_schema=_scope_schema(self._data.get(CONF_SCOPE, SCOPE_ALL)),
+        )
+
+    async def async_step_exclude_entities(
+        self, user_input: dict[str, Any] | None = None
+    ) -> config_entries.ConfigFlowResult:
+        entity_options = _get_battery_entities(self.hass)
+        if user_input is not None:
+            self._data.update(user_input)
+            return await self.async_step_thresholds()
+
+        return self.async_show_form(
+            step_id="exclude_entities",
+            data_schema=_exclude_schema(
+                entity_options, self._data.get(CONF_EXCLUDED_ENTITIES)
+            ),
         )
 
     async def async_step_select_devices(
@@ -285,7 +356,6 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         device_options = _get_battery_devices(self.hass)
         if not device_options:
             return self.async_abort(reason="no_battery_devices")
-
         errors: dict[str, str] = {}
         if user_input is not None:
             if not user_input.get(CONF_MONITORED_DEVICES):
@@ -293,12 +363,9 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             else:
                 self._data.update(user_input)
                 return await self.async_step_thresholds()
-
         return self.async_show_form(
             step_id="select_devices",
-            data_schema=_devices_schema(
-                device_options, self._data.get(CONF_MONITORED_DEVICES)
-            ),
+            data_schema=_devices_schema(device_options, self._data.get(CONF_MONITORED_DEVICES)),
             errors=errors,
         )
 
@@ -308,7 +375,6 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         entity_options = _get_battery_entities(self.hass)
         if not entity_options:
             return self.async_abort(reason="no_battery_entities")
-
         errors: dict[str, str] = {}
         if user_input is not None:
             if not user_input.get(CONF_MONITORED_ENTITIES):
@@ -316,12 +382,9 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             else:
                 self._data.update(user_input)
                 return await self.async_step_thresholds()
-
         return self.async_show_form(
             step_id="select_entities",
-            data_schema=_entities_schema(
-                entity_options, self._data.get(CONF_MONITORED_ENTITIES)
-            ),
+            data_schema=_entities_schema(entity_options, self._data.get(CONF_MONITORED_ENTITIES)),
             errors=errors,
         )
 
@@ -331,7 +394,6 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             self._data.update(user_input)
             return await self.async_step_notifications()
-
         return self.async_show_form(
             step_id="thresholds",
             data_schema=_thresholds_schema(self._data),
@@ -343,14 +405,9 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         service_options = _get_notification_services(self.hass)
         if not service_options:
             return self.async_abort(reason="no_notification_services")
-
         if user_input is not None:
             self._data.update(user_input)
-            return self.async_create_entry(
-                title="Battery Status Manager",
-                data=self._data,
-            )
-
+            return self.async_create_entry(title="Battery Status Manager", data=self._data)
         return self.async_show_form(
             step_id="notifications",
             data_schema=_notifications_schema(service_options, self._data),
@@ -358,9 +415,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     @staticmethod
     @callback
-    def async_get_options_flow(
-        config_entry: config_entries.ConfigEntry,
-    ) -> config_entries.OptionsFlow:
+    def async_get_options_flow(config_entry: config_entries.ConfigEntry) -> config_entries.OptionsFlow:
         return OptionsFlowHandler(config_entry)
 
 
@@ -371,7 +426,6 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 class OptionsFlowHandler(config_entries.OptionsFlow):
     def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
         self._config_entry = config_entry
-        # Pre-populate with existing config so all fields are filled in
         self._data: dict[str, Any] = dict(
             config_entry.options if config_entry.options else config_entry.data
         )
@@ -379,19 +433,29 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
     ) -> config_entries.ConfigFlowResult:
-        """Scope selection — entry point for the options flow."""
         if user_input is not None:
             self._data.update(user_input)
             scope = user_input[CONF_SCOPE]
+            if scope == SCOPE_ALL:
+                return await self.async_step_exclude_entities()
             if scope == SCOPE_BY_DEVICE:
                 return await self.async_step_select_devices()
-            if scope == SCOPE_BY_ENTITY:
-                return await self.async_step_select_entities()
-            return await self.async_step_thresholds()
-
+            return await self.async_step_select_entities()
         return self.async_show_form(
             step_id="init",
             data_schema=_scope_schema(self._data.get(CONF_SCOPE, SCOPE_ALL)),
+        )
+
+    async def async_step_exclude_entities(
+        self, user_input: dict[str, Any] | None = None
+    ) -> config_entries.ConfigFlowResult:
+        entity_options = _get_battery_entities(self.hass)
+        if user_input is not None:
+            self._data.update(user_input)
+            return await self.async_step_thresholds()
+        return self.async_show_form(
+            step_id="exclude_entities",
+            data_schema=_exclude_schema(entity_options, self._data.get(CONF_EXCLUDED_ENTITIES)),
         )
 
     async def async_step_select_devices(
@@ -400,7 +464,6 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         device_options = _get_battery_devices(self.hass)
         if not device_options:
             return self.async_abort(reason="no_battery_devices")
-
         errors: dict[str, str] = {}
         if user_input is not None:
             if not user_input.get(CONF_MONITORED_DEVICES):
@@ -408,12 +471,9 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
             else:
                 self._data.update(user_input)
                 return await self.async_step_thresholds()
-
         return self.async_show_form(
             step_id="select_devices",
-            data_schema=_devices_schema(
-                device_options, self._data.get(CONF_MONITORED_DEVICES)
-            ),
+            data_schema=_devices_schema(device_options, self._data.get(CONF_MONITORED_DEVICES)),
             errors=errors,
         )
 
@@ -423,7 +483,6 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         entity_options = _get_battery_entities(self.hass)
         if not entity_options:
             return self.async_abort(reason="no_battery_entities")
-
         errors: dict[str, str] = {}
         if user_input is not None:
             if not user_input.get(CONF_MONITORED_ENTITIES):
@@ -431,12 +490,9 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
             else:
                 self._data.update(user_input)
                 return await self.async_step_thresholds()
-
         return self.async_show_form(
             step_id="select_entities",
-            data_schema=_entities_schema(
-                entity_options, self._data.get(CONF_MONITORED_ENTITIES)
-            ),
+            data_schema=_entities_schema(entity_options, self._data.get(CONF_MONITORED_ENTITIES)),
             errors=errors,
         )
 
@@ -446,7 +502,6 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         if user_input is not None:
             self._data.update(user_input)
             return await self.async_step_notifications()
-
         return self.async_show_form(
             step_id="thresholds",
             data_schema=_thresholds_schema(self._data),
@@ -458,11 +513,9 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         service_options = _get_notification_services(self.hass)
         if not service_options:
             return self.async_abort(reason="no_notification_services")
-
         if user_input is not None:
             self._data.update(user_input)
             return self.async_create_entry(data=self._data)
-
         return self.async_show_form(
             step_id="notifications",
             data_schema=_notifications_schema(service_options, self._data),
