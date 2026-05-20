@@ -185,12 +185,21 @@ Alle instellingen kunnen op elk moment worden gewijzigd:
 
 De integratie controleert alle batterijniveaus elke **60 minuten**.
 
+### Één melding per niveau
+
+Wanneer zowel de waarschuwing als de kritieke melding zijn ingeschakeld, stuurt de integratie per controle altijd maar **één** melding — nooit beide tegelijk:
+
+- Batterij onder de **kritieke drempel** → alleen de 🚨 kritieke melding wordt verstuurd. De waarschuwing wordt onderdrukt, omdat de kritieke melding al de meest urgente informatie bevat.
+- Batterij onder de **waarschuwingsdrempel** maar boven de kritieke drempel → alleen de ⚠️ waarschuwing wordt verstuurd.
+
 ### Hysterese
 
 Om herhaalde meldingen voor hetzelfde evenement te voorkomen:
 
 - Een batterij onder de **waarschuwingsdrempel** triggert een waarschuwing. Er wordt geen nieuwe waarschuwing gestuurd totdat de batterij boven `waarschuwingsdrempel + 5 %` herstelt.
 - Een batterij onder de **kritieke drempel** triggert een kritieke melding. Er wordt geen nieuwe gestuurd totdat de batterij boven `kritieke drempel + 3 %` herstelt.
+
+Voorbeeld: waarschuwingsdrempel = 20 %, kritieke drempel = 10 %. Een batterij op 8 % triggert alleen een kritieke melding. Er wordt geen nieuwe kritieke melding gestuurd totdat de batterij boven 13 % stijgt en dan weer onder 10 % zakt. Herstelt de batterij naar 12 % (boven kritiek maar nog onder de waarschuwingsdrempel), dan wordt op dat moment een waarschuwing gestuurd.
 
 ### Uitputtingsprognose
 

@@ -318,22 +318,26 @@ class BatteryStatusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             if enable_low:
                 last_warned_at = self._warning_notified_at.get(entity_id, "")
                 if level < low_threshold:
-                    should_notify = False
-                    if not last_warned_at:
-                        should_notify = True
-                    elif enable_reminder:
-                        hours_since = (now - datetime.fromisoformat(last_warned_at)).total_seconds() / 3600
-                        if hours_since >= reminder_interval:
+                    # If critical is active and the battery is already in critical
+                    # territory, suppress the warning — the critical alert covers it.
+                    in_critical_zone = enable_critical and level < critical_threshold
+                    if not in_critical_zone:
+                        should_notify = False
+                        if not last_warned_at:
                             should_notify = True
-                    if should_notify and notifications_allowed:
-                        self._warning_notified_at[entity_id] = now.isoformat()
-                        await self._send_notifications(
-                            notification_services,
-                            notification_title,
-                            f"⚠️ {name}: Batteriestand bei {level:.0f}%"
-                            f" (Schwelle: {low_threshold}%)"
-                            f"{_forecast_suffix(forecast_days)}",
-                        )
+                        elif enable_reminder:
+                            hours_since = (now - datetime.fromisoformat(last_warned_at)).total_seconds() / 3600
+                            if hours_since >= reminder_interval:
+                                should_notify = True
+                        if should_notify and notifications_allowed:
+                            self._warning_notified_at[entity_id] = now.isoformat()
+                            await self._send_notifications(
+                                notification_services,
+                                notification_title,
+                                f"⚠️ {name}: Batteriestand bei {level:.0f}%"
+                                f" (Schwelle: {low_threshold}%)"
+                                f"{_forecast_suffix(forecast_days)}",
+                            )
                 elif level >= (low_threshold + LOW_BATTERY_HYSTERESIS) and last_warned_at:
                     self._warning_notified_at[entity_id] = ""
                     self._record_recovery(entity_id, now)

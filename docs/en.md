@@ -191,6 +191,13 @@ This section is for users who want to understand the logic behind notifications.
 
 The integration checks all battery levels every **60 minutes**. The exact time of the first check depends on when Home Assistant started.
 
+### One notification per level
+
+When both warning and critical alerts are enabled, the integration ensures that only **one** notification is sent per check — never both at the same time:
+
+- A battery below the **critical threshold** → only the 🚨 critical alert is sent. The warning is suppressed, because the critical alert already conveys the more urgent information.
+- A battery below the **warning threshold** but above the critical threshold → only the ⚠️ warning is sent.
+
 ### Hysteresis
 
 To prevent repeated notifications for the same event, the integration uses hysteresis:
@@ -198,7 +205,7 @@ To prevent repeated notifications for the same event, the integration uses hyste
 - A battery below the **warning threshold** triggers a warning. It will not trigger another warning until it first recovers above `warning threshold + 5 %`.
 - A battery below the **critical threshold** triggers a critical alert. It will not trigger another until it first recovers above `critical threshold + 3 %`.
 
-Example: warning threshold = 20 %. A battery at 18 % triggers a warning. It will not trigger again until it rises above 25 % and then drops below 20 % again.
+Example: warning threshold = 20 %, critical threshold = 10 %. A battery at 8 % triggers only a critical alert. It will not trigger another critical alert until it rises above 13 % and then drops below 10 % again. If it recovers to 12 % (above critical but still below warning), a warning is sent at that point.
 
 ### Depletion forecast
 

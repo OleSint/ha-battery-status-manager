@@ -187,12 +187,21 @@ Tous les paramètres peuvent être modifiés à tout moment :
 
 L'intégration vérifie tous les niveaux de batterie toutes les **60 minutes**.
 
+### Une notification par niveau
+
+Lorsque l'alerte et l'alerte critique sont toutes deux activées, l'intégration n'envoie qu'**une seule** notification par cycle de vérification — jamais les deux en même temps :
+
+- Batterie sous le **seuil critique** → seule l'alerte 🚨 critique est envoyée. L'alerte simple est supprimée, car l'alerte critique transmet déjà l'information la plus urgente.
+- Batterie sous le **seuil d'alerte** mais au-dessus du seuil critique → seule l'alerte ⚠️ est envoyée.
+
 ### Hystérésis
 
 Pour éviter les notifications répétées pour le même événement :
 
 - Une batterie sous le **seuil d'alerte** déclenche une alerte. Elle n'en déclenche pas d'autre tant qu'elle n'est pas remontée au-dessus de `seuil d'alerte + 5 %`.
 - Une batterie sous le **seuil critique** déclenche une alerte critique. Elle n'en déclenche pas d'autre tant qu'elle n'est pas remontée au-dessus de `seuil critique + 3 %`.
+
+Exemple : seuil d'alerte = 20 %, seuil critique = 10 %. Une batterie à 8 % ne déclenche qu'une alerte critique. Elle ne déclenchera pas d'autre alerte critique tant qu'elle n'est pas remontée au-dessus de 13 % puis redescendue sous 10 %. Si elle se rétablit à 12 % (au-dessus du critique mais encore sous l'alerte), une alerte simple est alors envoyée.
 
 ### Prévision d'épuisement
 

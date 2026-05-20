@@ -189,6 +189,13 @@ Alle Einstellungen können jederzeit geändert werden:
 
 Die Integration prüft alle Akkustände alle **60 Minuten**. Der genaue Zeitpunkt der ersten Prüfung hängt davon ab, wann Home Assistant gestartet wurde.
 
+### Eine Benachrichtigung pro Stufe
+
+Wenn Warnung und kritische Meldung beide aktiviert sind, sendet die Integration pro Prüfzyklus immer nur **eine** Benachrichtigung — nie beide gleichzeitig:
+
+- Akku unter dem **kritischen Schwellenwert** → nur die 🚨 kritische Meldung wird gesendet. Die Warnung wird unterdrückt, da die kritische Meldung bereits die dringendere Information enthält.
+- Akku unter dem **Warn-Schwellenwert**, aber über dem kritischen → nur die ⚠️ Warnung wird gesendet.
+
 ### Hysterese
 
 Um wiederholte Benachrichtigungen für dasselbe Ereignis zu verhindern, verwendet die Integration Hysterese:
@@ -196,7 +203,7 @@ Um wiederholte Benachrichtigungen für dasselbe Ereignis zu verhindern, verwende
 - Ein Akku unter dem **Warn-Schwellenwert** löst eine Warnung aus. Er löst keine weitere aus, bis er sich zunächst über `Warn-Schwellenwert + 5 %` erholt hat.
 - Ein Akku unter dem **kritischen Schwellenwert** löst eine kritische Meldung aus. Er löst keine weitere aus, bis er sich über `Kritischer Schwellenwert + 3 %` erholt hat.
 
-Beispiel: Warn-Schwellenwert = 20 %. Ein Akku bei 18 % löst eine Warnung aus. Er löst keine erneute Warnung aus, bis er über 25 % gestiegen und dann wieder unter 20 % gefallen ist.
+Beispiel: Warn-Schwellenwert = 20 %, kritischer Schwellenwert = 10 %. Ein Akku bei 8 % löst nur eine kritische Meldung aus. Er löst keine erneute kritische Meldung aus, bis er über 13 % gestiegen und dann wieder unter 10 % gefallen ist. Erholt er sich auf 12 % (über kritisch, aber noch unter Warn-Schwellenwert), wird an diesem Punkt eine Warnung gesendet.
 
 ### Entleerungsprognose
 

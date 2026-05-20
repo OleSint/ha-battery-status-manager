@@ -185,12 +185,21 @@ Todas las configuraciones se pueden cambiar en cualquier momento:
 
 La integración comprueba todos los niveles de batería cada **60 minutos**.
 
+### Una notificación por nivel
+
+Cuando tanto la advertencia como la alerta crítica están activadas, la integración envía únicamente **una** notificación por ciclo de comprobación — nunca ambas al mismo tiempo:
+
+- Batería por debajo del **umbral crítico** → solo se envía la alerta 🚨 crítica. La advertencia se suprime, porque la alerta crítica ya transmite la información más urgente.
+- Batería por debajo del **umbral de advertencia** pero por encima del crítico → solo se envía la ⚠️ advertencia.
+
 ### Histéresis
 
 Para evitar notificaciones repetidas por el mismo evento:
 
 - Una batería por debajo del **umbral de advertencia** dispara una advertencia. No disparará otra hasta que primero se recupere por encima de `umbral de advertencia + 5 %`.
 - Una batería por debajo del **umbral crítico** dispara una alerta crítica. No disparará otra hasta que primero se recupere por encima de `umbral crítico + 3 %`.
+
+Ejemplo: umbral de advertencia = 20 %, umbral crítico = 10 %. Una batería al 8 % solo dispara una alerta crítica. No disparará otra alerta crítica hasta que suba por encima del 13 % y luego vuelva a bajar del 10 %. Si se recupera al 12 % (por encima del crítico pero aún por debajo de la advertencia), en ese momento se envía una advertencia.
 
 ### Previsión de agotamiento
 
