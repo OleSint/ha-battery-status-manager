@@ -84,15 +84,21 @@ Im ersten Schritt des Assistenten wählst du aus, welche Batterien überwacht we
 
 Überwacht jede Entität in Home Assistant mit der Geräteklasse `battery`. Das ist die einfachste Option und schließt automatisch neue Geräte ein, die du später hinzufügst.
 
+> **Neue Geräte werden automatisch erkannt.** Wenn du ein neues Gerät zu Home Assistant hinzufügst, wird es ab der nächsten stündlichen Prüfung automatisch überwacht — ohne dass du die Konfiguration anpassen musst.
+
 Nach der Auswahl „Alle" kannst du optional bestimmte Entitäten **ausschließen** (z. B. einen Batteriesensor, der dauerhaft 0 % anzeigt, weil er defekt ist).
 
 ### Option B — Nach Gerät
 
 Du siehst eine Liste aller Geräte, die mindestens eine Batterieentität haben. Wähle ein oder mehrere Geräte aus. Nur Batterieentitäten der gewählten Geräte werden überwacht.
 
+> **Neue Geräte werden nicht automatisch hinzugefügt.** Wenn du ein neues Gerät zu Home Assistant hinzufügst und es überwachen möchtest, gehe auf **Konfigurieren** auf der Integrationskarte und füge es manuell zur Auswahl hinzu.
+
 ### Option C — Nach Entität
 
 Du siehst eine Liste aller Batterieentitäten in Home Assistant. Wähle genau aus, welche überwacht werden sollen.
+
+> **Neue Entitäten werden nicht automatisch hinzugefügt.** Wenn du ein neues Gerät hinzufügst, gehe auf **Konfigurieren** und ergänze die neue Entität in der Auswahl.
 
 ---
 

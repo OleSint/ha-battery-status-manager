@@ -84,15 +84,21 @@ El primer paso del asistente le permite elegir qué baterías supervisar.
 
 Supervisa todas las entidades de Home Assistant con la clase de dispositivo `battery`. Es la opción más sencilla e incluye automáticamente los nuevos dispositivos que añada posteriormente.
 
+> **Los nuevos dispositivos se detectan automáticamente.** Cuando añada un nuevo dispositivo a Home Assistant, será supervisado a partir de la siguiente comprobación horaria — sin necesidad de reconfigurar nada.
+
 Tras elegir "Todas", puede opcionalmente **excluir** entidades específicas (por ejemplo, un sensor de batería defectuoso que siempre muestra 0 %).
 
 ### Opción B — Por dispositivo
 
 Verá una lista de todos los dispositivos que tienen al menos una entidad de batería. Seleccione uno o varios dispositivos. Solo se supervisan las entidades de batería de los dispositivos seleccionados.
 
+> **Los nuevos dispositivos no se añaden automáticamente.** Si añade un nuevo dispositivo a Home Assistant y desea supervisarlo, vaya a **Configurar** en la tarjeta de la integración y añádalo manualmente a la selección.
+
 ### Opción C — Por entidad
 
 Verá una lista de todas las entidades de batería en Home Assistant. Seleccione exactamente cuáles supervisar.
+
+> **Las nuevas entidades no se añaden automáticamente.** Si añade un nuevo dispositivo, vaya a **Configurar** y añada la nueva entidad a la selección.
 
 ---
 

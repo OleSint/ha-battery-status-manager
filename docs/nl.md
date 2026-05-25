@@ -84,15 +84,21 @@ In de eerste stap van de wizard kiest u welke batterijen bewaakt worden.
 
 Bewaakt elke entiteit in Home Assistant met de apparaatklasse `battery`. Dit is de eenvoudigste optie en omvat automatisch nieuwe apparaten die u later toevoegt.
 
+> **Nieuwe apparaten worden automatisch herkend.** Wanneer u een nieuw apparaat toevoegt aan Home Assistant, wordt het bij de volgende uurlijkse controle automatisch meegenomen — zonder dat u iets hoeft te herconfigureren.
+
 Na het kiezen van "Alle" kunt u optioneel specifieke entiteiten **uitsluiten** (bijv. een defecte batterijsensor die altijd 0 % toont).
 
 ### Optie B — Per apparaat
 
 U ziet een lijst van alle apparaten met minimaal één batterijentiteit. Selecteer één of meerdere apparaten. Alleen batterijentiteiten van de geselecteerde apparaten worden bewaakt.
 
+> **Nieuwe apparaten worden niet automatisch toegevoegd.** Als u een nieuw apparaat toevoegt aan Home Assistant en dit wilt bewaken, ga dan naar **Configureren** op de integratiekaart en voeg het handmatig toe aan de selectie.
+
 ### Optie C — Per entiteit
 
 U ziet een lijst van alle batterijentiteiten in Home Assistant. Selecteer precies welke bewaakt moeten worden.
+
+> **Nieuwe entiteiten worden niet automatisch toegevoegd.** Als u een nieuw apparaat toevoegt, ga dan naar **Configureren** en voeg de nieuwe entiteit toe aan de selectie.
 
 ---
 

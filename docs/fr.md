@@ -84,15 +84,21 @@ La première étape de l'assistant vous permet de choisir quelles batteries surv
 
 Surveille toutes les entités Home Assistant ayant la classe d'appareil `battery`. C'est l'option la plus simple et elle inclut automatiquement les nouveaux appareils ajoutés ultérieurement.
 
+> **Les nouveaux appareils sont détectés automatiquement.** Lorsque vous ajoutez un nouvel appareil à Home Assistant, il sera surveillé dès la prochaine vérification horaire — sans aucune reconfiguration nécessaire.
+
 Après avoir choisi « Toutes », vous pouvez optionnellement **exclure** certaines entités (par exemple un capteur de batterie défectueux qui affiche toujours 0 %).
 
 ### Option B — Par appareil
 
 Vous voyez la liste de tous les appareils disposant d'au moins une entité batterie. Sélectionnez un ou plusieurs appareils. Seules les entités batterie des appareils sélectionnés sont surveillées.
 
+> **Les nouveaux appareils ne sont pas ajoutés automatiquement.** Si vous ajoutez un nouvel appareil à Home Assistant et souhaitez le surveiller, allez dans **Configurer** sur la carte de l'intégration et ajoutez-le manuellement à la sélection.
+
 ### Option C — Par entité
 
 Vous voyez la liste de toutes les entités batterie dans Home Assistant. Sélectionnez précisément celles à surveiller.
+
+> **Les nouvelles entités ne sont pas ajoutées automatiquement.** Si vous ajoutez un nouvel appareil, allez dans **Configurer** et ajoutez la nouvelle entité à la sélection.
 
 ---
 

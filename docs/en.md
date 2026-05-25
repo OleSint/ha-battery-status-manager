@@ -84,15 +84,21 @@ The first step of the wizard lets you choose which batteries to monitor.
 
 Monitors every entity in Home Assistant with device class `battery`. This is the simplest option and automatically includes new devices you add later.
 
+> **New devices are picked up automatically.** You do not need to reconfigure anything when you add a new device to Home Assistant — it will be monitored from the next hourly check onwards.
+
 After choosing "All", you can optionally **exclude** specific entities (for example, a battery entity that always shows 0 % because the sensor is broken).
 
 ### Option B — By device
 
 You will see a list of all devices that have at least one battery entity. You can select one or more devices. Only battery entities belonging to the selected devices will be monitored.
 
+> **New devices are not added automatically.** If you add a new device to Home Assistant and want it monitored, go to **Configure** on the integration card and add it to the selection.
+
 ### Option C — By entity
 
 You will see a list of all battery entities in Home Assistant. You can select exactly which ones to monitor.
+
+> **New entities are not added automatically.** If you add a new device, go to **Configure** on the integration card and add the new entity to the selection.
 
 ---
 
