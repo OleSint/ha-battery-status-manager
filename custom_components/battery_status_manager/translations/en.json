@@ -8,7 +8,7 @@
           "scope": "Monitoring scope"
         },
         "data_description": {
-          "scope": "Monitor all batteries, select by device, or select individual entities."
+          "scope": "**All**: New devices are picked up automatically — no action needed. Individual entities can optionally be excluded.\n**By device / By entity**: Only the selected devices or entities are monitored. New devices must be added manually via Configure.\n💡 Tip: If you want to monitor almost everything, use All with an exclusion list."
         }
       },
       "exclude_entities": {
@@ -42,13 +42,17 @@
           "critical_threshold": "Critical threshold (%)",
           "enable_drop_notification": "Enable rapid drain notification",
           "drop_threshold": "Drain threshold (%)",
-          "drop_timeframe": "Observation window (hours)"
+          "drop_timeframe": "Observation window (hours)",
+          "enable_unavailable_notification": "Notify when a device stops reporting",
+          "unavailable_hours": "Grace period before notification"
         },
         "data_description": {
           "low_battery_threshold": "Send a warning (⚠️) when the battery level falls below this value.",
           "critical_threshold": "Send a critical alert (🚨) when the battery level falls below this value. Must be lower than the warning threshold.",
           "drop_threshold": "Send a notification when the battery level drops by at least this amount.",
-          "drop_timeframe": "Time window in hours over which the battery drop is measured."
+          "drop_timeframe": "Time window in hours over which the battery drop is measured.",
+          "enable_unavailable_notification": "Alerts you when a device stops sending battery data — a strong indicator that the battery is dead.",
+          "unavailable_hours": "How long the device must be unreachable before a notification is sent."
         }
       },
       "notifications": {
@@ -91,6 +95,9 @@
         "description": "Choose which batteries should be monitored.",
         "data": {
           "scope": "Monitoring scope"
+        },
+        "data_description": {
+          "scope": "**All**: New devices are picked up automatically — no action needed. Individual entities can optionally be excluded.\n**By device / By entity**: Only the selected devices or entities are monitored. New devices must be added manually via Configure.\n💡 Tip: If you want to monitor almost everything, use All with an exclusion list."
         }
       },
       "exclude_entities": {
@@ -124,13 +131,17 @@
           "critical_threshold": "Critical threshold (%)",
           "enable_drop_notification": "Enable rapid drain notification",
           "drop_threshold": "Drain threshold (%)",
-          "drop_timeframe": "Observation window (hours)"
+          "drop_timeframe": "Observation window (hours)",
+          "enable_unavailable_notification": "Notify when a device stops reporting",
+          "unavailable_hours": "Grace period before notification"
         },
         "data_description": {
           "low_battery_threshold": "Send a warning (⚠️) when the battery level falls below this value.",
           "critical_threshold": "Send a critical alert (🚨) when the battery level falls below this value. Must be lower than the warning threshold.",
           "drop_threshold": "Send a notification when the battery level drops by at least this amount.",
-          "drop_timeframe": "Time window in hours over which the battery drop is measured."
+          "drop_timeframe": "Time window in hours over which the battery drop is measured.",
+          "enable_unavailable_notification": "Alerts you when a device stops sending battery data — a strong indicator that the battery is dead.",
+          "unavailable_hours": "How long the device must be unreachable before a notification is sent."
         }
       },
       "notifications": {

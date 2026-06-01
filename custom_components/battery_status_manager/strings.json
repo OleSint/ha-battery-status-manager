@@ -8,7 +8,7 @@
           "scope": "Überwachungsbereich"
         },
         "data_description": {
-          "scope": "Alle Batterien, Auswahl nach Gerät oder Auswahl nach einzelnen Entitäten."
+          "scope": "**Alle**: Neue Geräte werden automatisch erkannt — kein Eingriff nötig. Optional können einzelne Entitäten ausgeschlossen werden.\n**Nach Gerät / Nach Entität**: Nur die fest ausgewählten Geräte bzw. Entitäten werden überwacht. Neue Geräte müssen manuell über „Konfigurieren" hinzugefügt werden.\n💡 Tipp: Wer fast alles überwachen möchte, ist mit „Alle" + Ausschlussliste am besten bedient."
         }
       },
       "exclude_entities": {
@@ -42,13 +42,17 @@
           "critical_threshold": "Kritischer Schwellenwert (%)",
           "enable_drop_notification": "Benachrichtigung bei starkem Ladestandsverlust aktivieren",
           "drop_threshold": "Verlust-Schwellenwert (%)",
-          "drop_timeframe": "Beobachtungszeitraum (Stunden)"
+          "drop_timeframe": "Beobachtungszeitraum (Stunden)",
+          "enable_unavailable_notification": "Benachrichtigung wenn Gerät nicht mehr erreichbar",
+          "unavailable_hours": "Wartezeit bis zur Meldung"
         },
         "data_description": {
           "low_battery_threshold": "Warnung (⚠️), wenn der Ladestand unter diesen Wert fällt.",
           "critical_threshold": "Kritische Meldung (🚨), wenn der Ladestand diesen Wert unterschreitet. Muss kleiner als der Warn-Schwellenwert sein.",
           "drop_threshold": "Benachrichtigung, wenn der Ladestand um mindestens diesen Wert gesunken ist.",
-          "drop_timeframe": "Zeitraum in Stunden, innerhalb dem der Ladestandsverlust gemessen wird."
+          "drop_timeframe": "Zeitraum in Stunden, innerhalb dem der Ladestandsverlust gemessen wird.",
+          "enable_unavailable_notification": "Meldet Geräte, die keinen Akkustand mehr senden – ein starkes Zeichen für eine leere Batterie.",
+          "unavailable_hours": "Wie lange das Gerät nicht erreichbar sein muss, bevor eine Meldung gesendet wird."
         }
       },
       "notifications": {
@@ -91,6 +95,9 @@
         "description": "Wähle aus, welche Batterien überwacht werden sollen.",
         "data": {
           "scope": "Überwachungsbereich"
+        },
+        "data_description": {
+          "scope": "**Alle**: Neue Geräte werden automatisch erkannt — kein Eingriff nötig. Optional können einzelne Entitäten ausgeschlossen werden.\n**Nach Gerät / Nach Entität**: Nur die fest ausgewählten Geräte bzw. Entitäten werden überwacht. Neue Geräte müssen manuell über „Konfigurieren" hinzugefügt werden.\n💡 Tipp: Wer fast alles überwachen möchte, ist mit „Alle" + Ausschlussliste am besten bedient."
         }
       },
       "exclude_entities": {
@@ -124,13 +131,17 @@
           "critical_threshold": "Kritischer Schwellenwert (%)",
           "enable_drop_notification": "Benachrichtigung bei starkem Ladestandsverlust aktivieren",
           "drop_threshold": "Verlust-Schwellenwert (%)",
-          "drop_timeframe": "Beobachtungszeitraum (Stunden)"
+          "drop_timeframe": "Beobachtungszeitraum (Stunden)",
+          "enable_unavailable_notification": "Benachrichtigung wenn Gerät nicht mehr erreichbar",
+          "unavailable_hours": "Wartezeit bis zur Meldung"
         },
         "data_description": {
           "low_battery_threshold": "Warnung (⚠️), wenn der Ladestand unter diesen Wert fällt.",
           "critical_threshold": "Kritische Meldung (🚨), wenn der Ladestand diesen Wert unterschreitet. Muss kleiner als der Warn-Schwellenwert sein.",
           "drop_threshold": "Benachrichtigung, wenn der Ladestand um mindestens diesen Wert gesunken ist.",
-          "drop_timeframe": "Zeitraum in Stunden, innerhalb dem der Ladestandsverlust gemessen wird."
+          "drop_timeframe": "Zeitraum in Stunden, innerhalb dem der Ladestandsverlust gemessen wird.",
+          "enable_unavailable_notification": "Meldet Geräte, die keinen Akkustand mehr senden – ein starkes Zeichen für eine leere Batterie.",
+          "unavailable_hours": "Wie lange das Gerät nicht erreichbar sein muss, bevor eine Meldung gesendet wird."
         }
       },
       "notifications": {

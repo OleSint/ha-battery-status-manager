@@ -32,6 +32,7 @@ from .const import (
     CONF_ENABLE_LOW_BATTERY_NOTIFICATION,
     CONF_ENABLE_REMINDER,
     CONF_ENABLE_TIME_WINDOW,
+    CONF_ENABLE_UNAVAILABLE_NOTIFICATION,
     CONF_ENABLE_WEEKLY_REPORT,
     CONF_EXCLUDED_ENTITIES,
     CONF_LOW_BATTERY_THRESHOLD,
@@ -43,6 +44,7 @@ from .const import (
     CONF_SCOPE,
     CONF_TIME_WINDOW_END,
     CONF_TIME_WINDOW_START,
+    CONF_UNAVAILABLE_HOURS,
     CONF_WEEKLY_REPORT_DAY,
     CONF_WEEKLY_REPORT_TIME,
     DAY_KEYS,
@@ -55,12 +57,14 @@ from .const import (
     DEFAULT_ENABLE_LOW_BATTERY,
     DEFAULT_ENABLE_REMINDER,
     DEFAULT_ENABLE_TIME_WINDOW,
+    DEFAULT_ENABLE_UNAVAILABLE,
     DEFAULT_ENABLE_WEEKLY_REPORT,
     DEFAULT_LOW_BATTERY_THRESHOLD,
     DEFAULT_NOTIFICATION_TITLE,
     DEFAULT_REMINDER_INTERVAL,
     DEFAULT_TIME_WINDOW_END,
     DEFAULT_TIME_WINDOW_START,
+    DEFAULT_UNAVAILABLE_HOURS,
     DEFAULT_WEEKLY_REPORT_DAY,
     DEFAULT_WEEKLY_REPORT_TIME,
     DOMAIN,
@@ -237,6 +241,20 @@ def _thresholds_schema(data: dict[str, Any]) -> vol.Schema:
             min=1, max=168, step=1,
             mode=NumberSelectorMode.BOX,
             unit_of_measurement="h",
+        )),
+        vol.Required(
+            CONF_ENABLE_UNAVAILABLE_NOTIFICATION,
+            default=data.get(CONF_ENABLE_UNAVAILABLE_NOTIFICATION, DEFAULT_ENABLE_UNAVAILABLE),
+        ): BooleanSelector(),
+        vol.Optional(
+            CONF_UNAVAILABLE_HOURS,
+            default=data.get(CONF_UNAVAILABLE_HOURS, DEFAULT_UNAVAILABLE_HOURS),
+        ): SelectSelector(SelectSelectorConfig(
+            options=[
+                {"value": "12", "label": "12 Stunden"},
+                {"value": "24", "label": "24 Stunden"},
+            ],
+            mode=SelectSelectorMode.LIST,
         )),
     })
 

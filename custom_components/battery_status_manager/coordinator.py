@@ -22,6 +22,7 @@ from .const import (
     CONF_ENABLE_LOW_BATTERY_NOTIFICATION,
     CONF_ENABLE_REMINDER,
     CONF_ENABLE_TIME_WINDOW,
+    CONF_ENABLE_UNAVAILABLE_NOTIFICATION,
     CONF_ENABLE_WEEKLY_REPORT,
     CONF_EXCLUDED_ENTITIES,
     CONF_LOW_BATTERY_THRESHOLD,
@@ -33,6 +34,7 @@ from .const import (
     CONF_SCOPE,
     CONF_TIME_WINDOW_END,
     CONF_TIME_WINDOW_START,
+    CONF_UNAVAILABLE_HOURS,
     CONF_WEEKLY_REPORT_DAY,
     CONF_WEEKLY_REPORT_TIME,
     CRITICAL_HYSTERESIS,
@@ -46,6 +48,7 @@ from .const import (
     DEFAULT_ENABLE_LOW_BATTERY,
     DEFAULT_ENABLE_REMINDER,
     DEFAULT_ENABLE_TIME_WINDOW,
+    DEFAULT_ENABLE_UNAVAILABLE,
     DEFAULT_ENABLE_WEEKLY_REPORT,
     DEFAULT_LOW_BATTERY_THRESHOLD,
     DEFAULT_NOTIFICATION_TITLE,
@@ -53,6 +56,7 @@ from .const import (
     DEFAULT_SCAN_INTERVAL,
     DEFAULT_TIME_WINDOW_END,
     DEFAULT_TIME_WINDOW_START,
+    DEFAULT_UNAVAILABLE_HOURS,
     DEFAULT_WEEKLY_REPORT_DAY,
     DEFAULT_WEEKLY_REPORT_TIME,
     DOMAIN,
@@ -166,6 +170,10 @@ class BatteryStatusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         self._recoveries: dict[str, list[str]] = {}
         # ISO timestamp of last weekly report
         self._last_weekly_report: str = ""
+        # ISO timestamp of last valid numeric reading per entity
+        self._last_seen: dict[str, str] = {}
+        # ISO timestamp of last sent unavailable notification ("" = not notified)
+        self._unavailable_notified: dict[str, str] = {}
 
         self._store_loaded = False
 
@@ -186,6 +194,8 @@ class BatteryStatusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         self._recoveries = data.get("recoveries", {})
         self._last_weekly_report = data.get("last_weekly_report", "")
         self._critical_notified_at = data.get("critical_notified_at", {})
+        self._last_seen = data.get("last_seen", {})
+        self._unavailable_notified = data.get("unavailable_notified", {})
 
         # Migrate old boolean format → timestamp format
         raw = data.get("warning_notified_at", data.get("low_notified_at", data.get("low_notified", {})))
@@ -203,6 +213,8 @@ class BatteryStatusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             "drop_notified": self._drop_notified,
             "recoveries": self._recoveries,
             "last_weekly_report": self._last_weekly_report,
+            "last_seen": self._last_seen,
+            "unavailable_notified": self._unavailable_notified,
         })
 
     # ------------------------------------------------------------------
@@ -291,6 +303,9 @@ class BatteryStatusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
 
         result: dict[str, Any] = {}
 
+        enable_unavailable: bool = config.get(CONF_ENABLE_UNAVAILABLE_NOTIFICATION, DEFAULT_ENABLE_UNAVAILABLE)
+        unavailable_hours: int = int(config.get(CONF_UNAVAILABLE_HOURS, DEFAULT_UNAVAILABLE_HOURS))
+
         for entity_id in entity_ids:
             state = self.hass.states.get(entity_id)
             if not state or state.state in ("unavailable", "unknown", ""):
@@ -302,6 +317,11 @@ class BatteryStatusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
 
             name: str = state.attributes.get("friendly_name", entity_id)
             result[entity_id] = {"level": level, "name": name}
+
+            # Track last valid reading and clear any pending unavailable notification
+            self._last_seen[entity_id] = now.isoformat()
+            if self._unavailable_notified.get(entity_id):
+                self._unavailable_notified[entity_id] = ""
 
             # Update history
             history = self._history.setdefault(entity_id, [])
@@ -390,6 +410,31 @@ class BatteryStatusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
                                 f"📉 {name}: Batteriestand um {drop:.0f}% innerhalb von"
                                 f" {drop_timeframe}h gesunken (aktuell: {level:.0f}%)",
                             )
+
+        # --- Unavailable detection ---
+        if enable_unavailable and notification_services:
+            for entity_id in entity_ids:
+                last_seen_ts = self._last_seen.get(entity_id)
+                if not last_seen_ts:
+                    continue  # Never seen a valid reading — skip
+                state = self.hass.states.get(entity_id)
+                if not state or state.state not in ("unavailable", "unknown"):
+                    continue  # Currently reporting fine
+                hours_gone = (now - datetime.fromisoformat(last_seen_ts)).total_seconds() / 3600
+                if hours_gone < unavailable_hours:
+                    continue  # Not gone long enough yet
+                if self._unavailable_notified.get(entity_id):
+                    continue  # Already notified
+                if not notifications_allowed:
+                    continue
+                name = state.attributes.get("friendly_name", entity_id)
+                self._unavailable_notified[entity_id] = now.isoformat()
+                await self._send_notifications(
+                    notification_services,
+                    notification_title,
+                    f"📵 {name}: Keine Rückmeldung seit {hours_gone:.0f} Stunden"
+                    f" – Batterie möglicherweise leer",
+                )
 
         # --- Weekly report ---
         await self._maybe_send_weekly_report(now, config, entity_ids, notification_services, notification_title)

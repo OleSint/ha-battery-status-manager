@@ -22,6 +22,8 @@ CONF_REMINDER_INTERVAL = "reminder_interval"
 CONF_ENABLE_WEEKLY_REPORT = "enable_weekly_report"
 CONF_WEEKLY_REPORT_DAY = "weekly_report_day"
 CONF_WEEKLY_REPORT_TIME = "weekly_report_time"
+CONF_ENABLE_UNAVAILABLE_NOTIFICATION = "enable_unavailable_notification"
+CONF_UNAVAILABLE_HOURS = "unavailable_hours"
 
 SCOPE_ALL = "all"
 SCOPE_BY_DEVICE = "by_device"
@@ -44,6 +46,8 @@ DEFAULT_REMINDER_INTERVAL = 24
 DEFAULT_ENABLE_WEEKLY_REPORT = False
 DEFAULT_WEEKLY_REPORT_DAY = "mon"
 DEFAULT_WEEKLY_REPORT_TIME = "09:00:00"
+DEFAULT_ENABLE_UNAVAILABLE = False
+DEFAULT_UNAVAILABLE_HOURS = "24"
 
 # Ordered Monday → Sunday (matches Python's datetime.weekday())
 DAY_KEYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
