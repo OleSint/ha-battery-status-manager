@@ -8,7 +8,7 @@
           "scope": "Monitoring scope"
         },
         "data_description": {
-          "scope": "**All**: New devices are picked up automatically — no action needed. Individual entities can optionally be excluded.\n**By device / By entity**: Only the selected devices or entities are monitored. New devices must be added manually via Configure.\n💡 Tip: If you want to monitor almost everything, use All with an exclusion list."
+          "scope": "All: New devices are picked up automatically, no action needed. Individual entities can optionally be excluded. | By device / By entity: Only the selected devices or entities are monitored. New devices must be added manually via Configure. Tip: If you want to monitor almost everything, use All with an exclusion list."
         }
       },
       "exclude_entities": {
@@ -97,7 +97,7 @@
           "scope": "Monitoring scope"
         },
         "data_description": {
-          "scope": "**All**: New devices are picked up automatically — no action needed. Individual entities can optionally be excluded.\n**By device / By entity**: Only the selected devices or entities are monitored. New devices must be added manually via Configure.\n💡 Tip: If you want to monitor almost everything, use All with an exclusion list."
+          "scope": "All: New devices are picked up automatically, no action needed. Individual entities can optionally be excluded. | By device / By entity: Only the selected devices or entities are monitored. New devices must be added manually via Configure. Tip: If you want to monitor almost everything, use All with an exclusion list."
         }
       },
       "exclude_entities": {

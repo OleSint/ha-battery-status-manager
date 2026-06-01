@@ -8,7 +8,7 @@
           "scope": "Überwachungsbereich"
         },
         "data_description": {
-          "scope": "**Alle**: Neue Geräte werden automatisch erkannt — kein Eingriff nötig. Optional können einzelne Entitäten ausgeschlossen werden.\n**Nach Gerät / Nach Entität**: Nur die fest ausgewählten Geräte bzw. Entitäten werden überwacht. Neue Geräte müssen manuell über „Konfigurieren" hinzugefügt werden.\n💡 Tipp: Wer fast alles überwachen möchte, ist mit „Alle" + Ausschlussliste am besten bedient."
+          "scope": "Alle: Neue Geräte werden automatisch erkannt, kein Eingriff nötig. Optional können einzelne Entitäten ausgeschlossen werden. | Nach Gerät / Nach Entität: Nur die fest ausgewählten Geräte bzw. Entitäten werden überwacht. Neue Geräte müssen manuell über Konfigurieren hinzugefügt werden. Tipp: Wer fast alles überwachen möchte, ist mit Alle + Ausschlussliste am besten bedient."
         }
       },
       "exclude_entities": {
@@ -97,7 +97,7 @@
           "scope": "Überwachungsbereich"
         },
         "data_description": {
-          "scope": "**Alle**: Neue Geräte werden automatisch erkannt — kein Eingriff nötig. Optional können einzelne Entitäten ausgeschlossen werden.\n**Nach Gerät / Nach Entität**: Nur die fest ausgewählten Geräte bzw. Entitäten werden überwacht. Neue Geräte müssen manuell über „Konfigurieren" hinzugefügt werden.\n💡 Tipp: Wer fast alles überwachen möchte, ist mit „Alle" + Ausschlussliste am besten bedient."
+          "scope": "Alle: Neue Geräte werden automatisch erkannt, kein Eingriff nötig. Optional können einzelne Entitäten ausgeschlossen werden. | Nach Gerät / Nach Entität: Nur die fest ausgewählten Geräte bzw. Entitäten werden überwacht. Neue Geräte müssen manuell über Konfigurieren hinzugefügt werden. Tipp: Wer fast alles überwachen möchte, ist mit Alle + Ausschlussliste am besten bedient."
         }
       },
       "exclude_entities": {
