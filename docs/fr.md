@@ -120,6 +120,15 @@ Vous voyez la liste de toutes les entités batterie dans Home Assistant. Sélect
 - **Seuil de décharge (%)** — Nombre de points de pourcentage perdus pour déclencher l'alerte. Exemple : 20 %.
 - **Fenêtre d'observation (heures)** — Sur combien d'heures la perte est mesurée. Exemple : 24 heures.
 
+### Appareil silencieux (📵)
+
+- **Notifier quand un appareil cesse de répondre** — Activez cette option pour être averti lorsqu'un appareil qui transmettait auparavant son niveau de batterie ne renvoie plus aucune donnée.
+- **Délai avant notification** — Combien de temps l'appareil doit rester silencieux avant l'envoi de la notification : **12 heures** ou **24 heures**.
+
+C'est souvent le signe le plus fiable qu'une batterie est complètement vide : l'appareil disparaît simplement de Home Assistant faute d'énergie pour émettre.
+
+> La notification n'est envoyée que si l'appareil a déjà transmis au moins une valeur valide. Les nouveaux appareils jamais vus sont ignorés. Dès que l'appareil revient en ligne, l'alerte est automatiquement réinitialisée.
+
 ---
 
 ## 7. Notifications

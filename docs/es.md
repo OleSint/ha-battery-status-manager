@@ -120,6 +120,15 @@ Verá una lista de todas las entidades de batería en Home Assistant. Seleccione
 - **Umbral de drenaje (%)** — Cuántos puntos porcentuales de pérdida disparan una alerta. Ejemplo: 20 %.
 - **Ventana de observación (horas)** — A lo largo de cuántas horas se mide la pérdida. Ejemplo: 24 horas.
 
+### Dispositivo sin respuesta (📵)
+
+- **Notificar cuando un dispositivo deja de reportar** — Active esto para recibir una notificación cuando un dispositivo que antes enviaba datos de batería deja de transmitir completamente.
+- **Período de gracia antes de la notificación** — Cuánto tiempo debe estar silencioso el dispositivo antes de enviar la notificación: **12 horas** o **24 horas**.
+
+Esta es a menudo la señal más fiable de que una batería está completamente agotada: el dispositivo simplemente desaparece de Home Assistant porque no tiene energía suficiente para transmitir.
+
+> La notificación solo se envía si el dispositivo ya ha reportado al menos una vez un nivel de batería válido. Los nuevos dispositivos que nunca han sido vistos se ignoran. En cuanto el dispositivo vuelva a estar en línea, la alerta se borra automáticamente.
+
 ---
 
 ## 7. Notificaciones

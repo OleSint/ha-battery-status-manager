@@ -122,6 +122,15 @@ Du siehst eine Liste aller Batterieentitäten in Home Assistant. Wähle genau au
 
 > **Tipp:** Ein Verlust von 20 % in 24 Stunden ist für die meisten Sensorakkus ungewöhnlich, die normalerweise monatelang halten. Diese Funktion ist hilfreich, um fehlerhafte Akkus oder versehentlich aktive Geräte zu erkennen.
 
+### Gerät meldet sich nicht mehr (📵)
+
+- **Benachrichtigung wenn Gerät nicht mehr erreichbar** — Aktivieren, um benachrichtigt zu werden, wenn ein Gerät, das bisher einen Akkustand gemeldet hat, gar keine Daten mehr sendet.
+- **Wartezeit bis zur Meldung** — Wie lange das Gerät still sein muss, bevor die Meldung gesendet wird: **12 Stunden** oder **24 Stunden**.
+
+Das ist oft das zuverlässigste Zeichen für eine vollständig leere Batterie: Das Gerät verschwindet einfach aus Home Assistant, weil es keine Energie mehr hat, um sich zu melden.
+
+> Die Meldung wird nur gesendet, wenn das Gerät zuvor mindestens einmal einen gültigen Akkustand gemeldet hat. Neue Geräte, die noch nie sichtbar waren, werden ignoriert. Sobald das Gerät wieder online ist, wird die Meldung automatisch zurückgesetzt.
+
 ---
 
 ## 7. Benachrichtigungen

@@ -122,6 +122,15 @@ You will see a list of all battery entities in Home Assistant. You can select ex
 
 > **Tip:** A rapid drain of 20 % in 24 hours is unusual for most sensor batteries, which typically last months. This is useful to catch batteries that are failing or devices that have been left on accidentally.
 
+### Device goes silent (📵)
+
+- **Notify when a device stops reporting** — Turn this on to be notified when a device that previously reported a battery level stops sending any data at all.
+- **Grace period before notification** — How long the device must be silent before the notification is sent: **12 hours** or **24 hours**.
+
+This is often the most reliable signal that a battery is completely dead: the device simply disappears from Home Assistant because it has no power left to transmit.
+
+> The notification is only sent if the device was seen at least once with a valid battery reading. Brand-new devices that have never reported are ignored. Once the device comes back online, the alert is automatically cleared.
+
 ---
 
 ## 7. Notifications

@@ -120,6 +120,15 @@ U ziet een lijst van alle batterijentiteiten in Home Assistant. Selecteer precie
 - **Ontladingsdrempel (%)** — Hoeveel procentpunten verlies een melding triggert. Voorbeeld: 20 %.
 - **Observatievenster (uren)** — Over hoeveel uren het verlies wordt gemeten. Voorbeeld: 24 uur.
 
+### Apparaat reageert niet meer (📵)
+
+- **Meld wanneer een apparaat stopt met rapporteren** — Schakel dit in om een melding te ontvangen wanneer een apparaat dat eerder batterijgegevens stuurde, helemaal niets meer verzendt.
+- **Wachttijd voor melding** — Hoe lang het apparaat stil moet zijn voordat de melding wordt verstuurd: **12 uur** of **24 uur**.
+
+Dit is vaak het betrouwbaarste teken dat een batterij volledig leeg is: het apparaat verdwijnt eenvoudigweg uit Home Assistant omdat het geen energie meer heeft om te zenden.
+
+> De melding wordt alleen verstuurd als het apparaat eerder minstens één geldige batterijwaarde heeft gerapporteerd. Nieuwe apparaten die nog nooit zijn gezien, worden genegeerd. Zodra het apparaat weer online is, wordt de melding automatisch gewist.
+
 ---
 
 ## 7. Meldingen
