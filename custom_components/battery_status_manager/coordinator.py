@@ -308,7 +308,15 @@ class BatteryStatusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
 
         for entity_id in entity_ids:
             state = self.hass.states.get(entity_id)
-            if not state or state.state in ("unavailable", "unknown", ""):
+            if not state:
+                _LOGGER.warning(
+                    "Monitored entity '%s' not found in Home Assistant. "
+                    "It may have been renamed or removed. "
+                    "Please reconfigure the integration.",
+                    entity_id,
+                )
+                continue
+            if state.state in ("unavailable", "unknown", ""):
                 continue
             try:
                 level = float(state.state)

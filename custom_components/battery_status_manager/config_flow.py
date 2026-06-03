@@ -154,8 +154,10 @@ def _exclude_schema(
     entity_options: list[dict[str, str]],
     current: list[str] | None = None,
 ) -> vol.Schema:
+    valid_ids = {o["value"] for o in entity_options}
+    current = [eid for eid in (current or []) if eid in valid_ids]
     return vol.Schema({
-        vol.Optional(CONF_EXCLUDED_ENTITIES, default=current or []): SelectSelector(
+        vol.Optional(CONF_EXCLUDED_ENTITIES, default=current): SelectSelector(
             SelectSelectorConfig(
                 options=entity_options,
                 multiple=True,
@@ -169,8 +171,10 @@ def _devices_schema(
     device_options: list[dict[str, str]],
     current: list[str] | None = None,
 ) -> vol.Schema:
+    valid_ids = {o["value"] for o in device_options}
+    current = [did for did in (current or []) if did in valid_ids]
     return vol.Schema({
-        vol.Required(CONF_MONITORED_DEVICES, default=current or []): SelectSelector(
+        vol.Required(CONF_MONITORED_DEVICES, default=current): SelectSelector(
             SelectSelectorConfig(
                 options=device_options,
                 multiple=True,
@@ -184,6 +188,9 @@ def _entities_schema(
     entity_options: list[dict[str, str]],
     current: list[str] | None = None,
 ) -> vol.Schema:
+    valid_ids = {o["value"] for o in entity_options}
+    if current is not None:
+        current = [eid for eid in current if eid in valid_ids]
     default = current if current is not None else [o["value"] for o in entity_options]
     return vol.Schema({
         vol.Required(CONF_MONITORED_ENTITIES, default=default): SelectSelector(
