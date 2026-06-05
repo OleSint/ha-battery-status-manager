@@ -200,6 +200,15 @@ Alle Einstellungen können jederzeit geändert werden:
 
 ## 10. Wie Benachrichtigungen funktionieren (technische Details)
 
+### Unterstützte Sensortypen
+
+Die Integration unterstützt zwei Arten von Batteriesensoren:
+
+- **Numerische Sensoren** — melden einen Prozentwert (0–100 %). Alle Funktionen verfügbar: Warnung, Kritisch, Starkverlust, Entleerungsprognose, Wochenbericht.
+- **Binäre Sensoren** — melden `on` (Batterie schwach) oder `off` (ok), z. B. Homematic IP `LOW_BAT`. Unterstützte Funktionen: Warnbenachrichtigung, Erinnerung, Erholungsverfolgung. Prognose, Verlusterkennung und kritischer Schwellenwert sind nicht anwendbar.
+
+Binäre Sensoren werden in der Entitätsauswahl mit `(LOW_BAT)` angezeigt, wenn aktiv.
+
 ### Prüfintervall
 
 Die Integration prüft alle Akkustände alle **60 Minuten**. Der genaue Zeitpunkt der ersten Prüfung hängt davon ab, wann Home Assistant gestartet wurde.
@@ -247,7 +256,7 @@ Alle Zustandsdaten (Benachrichtigungszeitstempel, Verlauf, Erholungen) werden in
 - Die Hysterese ist standardmäßig aktiv. Wenn der Akkustand um den Schwellenwert herum schwankt, kann es trotzdem zu mehreren Meldungen kommen.
 
 **Eine bestimmte Entität erscheint nicht in der Auswahlliste**
-- Nur Entitäten mit der Geräteklasse `battery` und einem numerischen Zustand (0–100) werden berücksichtigt. Virtuelle oder Template-Sensoren können ausgeschlossen sein.
+- Nur Entitäten mit der Geräteklasse `battery` werden berücksichtigt. Sowohl numerische (0–100 %) als auch binäre Zustände (on/off, z. B. Homematic IP LOW_BAT) werden unterstützt. Virtuelle oder Template-Sensoren ohne Geräteklasse `battery` erscheinen nicht.
 
 **Der Wochenbericht kommt nicht an**
 - Der Bericht wird nur einmal pro 7-Tage-Zeitraum gesendet. Prüfe den konfigurierten Tag und die Uhrzeit.

@@ -202,6 +202,15 @@ All settings can be changed at any time:
 
 This section is for users who want to understand the logic behind notifications.
 
+### Supported sensor types
+
+The integration supports two types of battery sensors:
+
+- **Numeric sensors** — report a percentage (0–100 %). All features are available: warning, critical, drop detection, depletion forecast, weekly report.
+- **Binary sensors** — report `on` (low battery) or `off` (ok), e.g. Homematic IP `LOW_BAT`. Supported features: warning notification, reminder, recovery tracking. Forecast, drop detection and critical threshold are not applicable.
+
+Binary sensors are shown in the entity selection list with `(LOW_BAT)` when active.
+
 ### Check interval
 
 The integration checks all battery levels every **60 minutes**. The exact time of the first check depends on when Home Assistant started.
@@ -249,7 +258,7 @@ All state data (notification timestamps, history, recoveries) is stored in Home 
 - Hysteresis is active by default. If you are still getting too many, check whether the battery level is fluctuating around the threshold value.
 
 **A specific battery entity does not appear in the selection list**
-- Only entities with device class `battery` and a numeric state (0–100) are included. Virtual or template sensors may not qualify.
+- Only entities with device class `battery` are included. Both numeric (0–100 %) and binary (on/off, e.g. Homematic IP LOW_BAT) states are supported. Virtual or template sensors without device class `battery` will not appear.
 
 **The weekly report is not arriving**
 - The report is only sent once per 7-day period. Check the configured day and time.

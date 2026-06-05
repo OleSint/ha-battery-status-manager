@@ -239,7 +239,7 @@ Toutes les données d'état sont stockées dans le fichier `.storage/battery_sta
 - L'hystérésis est active par défaut. Vérifiez si le niveau de batterie oscille autour du seuil.
 
 **Une entité n'apparaît pas dans la liste de sélection**
-- Seules les entités avec la classe d'appareil `battery` et une valeur numérique (0–100) sont incluses.
+- Seules les entités avec la classe d'appareil `battery` sont incluses. Les états numériques (0–100 %) et binaires (on/off, ex. Homematic IP LOW_BAT) sont tous deux pris en charge.
 
 **Le rapport hebdomadaire n'arrive pas**
 - Le rapport est envoyé au maximum une fois tous les 7 jours. Vérifiez le jour et l'heure configurés.

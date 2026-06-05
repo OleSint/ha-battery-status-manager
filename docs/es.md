@@ -237,7 +237,7 @@ Todos los datos de estado se almacenan en el archivo `.storage/battery_status_ma
 - La histéresis está activa por defecto. Verifique si el nivel de batería fluctúa alrededor del umbral.
 
 **Una entidad no aparece en la lista de selección**
-- Solo se incluyen las entidades con clase de dispositivo `battery` y un valor numérico (0–100).
+- Solo se incluyen las entidades con clase de dispositivo `battery`. Se admiten tanto estados numéricos (0–100 %) como binarios (on/off, p. ej. Homematic IP LOW_BAT).
 
 **El informe semanal no llega**
 - El informe se envía como máximo una vez cada 7 días. Verifique el día y la hora configurados.

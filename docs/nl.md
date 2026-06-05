@@ -237,7 +237,7 @@ Alle statusgegevens worden opgeslagen in het bestand `.storage/battery_status_ma
 - Hysterese is standaard actief. Controleer of het batterijniveau schommelt rond de drempelwaarde.
 
 **Een entiteit verschijnt niet in de selectielijst**
-- Alleen entiteiten met apparaatklasse `battery` en een numerieke waarde (0–100) zijn inbegrepen.
+- Alleen entiteiten met apparaatklasse `battery` zijn inbegrepen. Zowel numerieke (0–100 %) als binaire staten (on/off, bijv. Homematic IP LOW_BAT) worden ondersteund.
 
 **Het wekelijks rapport komt niet aan**
 - Het rapport wordt maximaal eenmaal per 7 dagen verzonden. Controleer de geconfigureerde dag en tijd.
