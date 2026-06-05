@@ -102,7 +102,12 @@ def _get_battery_entities(hass: HomeAssistant) -> list[dict[str, str]]:
             if state:
                 label = state.attributes.get("friendly_name", label)
                 if state.state not in ("unavailable", "unknown", ""):
-                    label = f"{label} ({state.state}%)"
+                    try:
+                        float(state.state)
+                        label = f"{label} ({state.state}%)"
+                    except (ValueError, TypeError):
+                        if state.state == "on":
+                            label = f"{label} (LOW_BAT)"
             options.append({"value": entry.entity_id, "label": label})
     return sorted(options, key=lambda x: x["label"].lower())
 

@@ -318,18 +318,63 @@ class BatteryStatusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
                 continue
             if state.state in ("unavailable", "unknown", ""):
                 continue
-            try:
-                level = float(state.state)
-            except (ValueError, TypeError):
-                continue
 
             name: str = state.attributes.get("friendly_name", entity_id)
-            result[entity_id] = {"level": level, "name": name}
+
+            # Determine if this is a numeric (%) or binary (on/off) battery sensor
+            try:
+                level: float | None = float(state.state)
+                is_binary = False
+            except (ValueError, TypeError):
+                if state.state in ("on", "off"):
+                    level = None
+                    is_binary = True
+                else:
+                    continue
+
+            if is_binary:
+                result[entity_id] = {"level": None, "binary": True, "low_bat": state.state == "on", "name": name}
+            else:
+                result[entity_id] = {"level": level, "binary": False, "name": name}
 
             # Track last valid reading and clear any pending unavailable notification
             self._last_seen[entity_id] = now.isoformat()
             if self._unavailable_notified.get(entity_id):
                 self._unavailable_notified[entity_id] = ""
+
+            if not notification_services:
+                continue
+
+            # -----------------------------------------------------------------
+            # Binary battery sensor (e.g. Homematic IP LOW_BAT)
+            # Only warning + reminder supported; no forecast, no drop, no critical
+            # -----------------------------------------------------------------
+            if is_binary:
+                if enable_low:
+                    last_warned_at = self._warning_notified_at.get(entity_id, "")
+                    if state.state == "on":  # LOW_BAT active
+                        should_notify = False
+                        if not last_warned_at:
+                            should_notify = True
+                        elif enable_reminder:
+                            hours_since = (now - datetime.fromisoformat(last_warned_at)).total_seconds() / 3600
+                            if hours_since >= reminder_interval:
+                                should_notify = True
+                        if should_notify and notifications_allowed:
+                            self._warning_notified_at[entity_id] = now.isoformat()
+                            await self._send_notifications(
+                                notification_services,
+                                notification_title,
+                                f"⚠️ {name}: Batterie schwach (LOW_BAT)",
+                            )
+                    elif last_warned_at:  # LOW_BAT cleared → recovery
+                        self._warning_notified_at[entity_id] = ""
+                        self._record_recovery(entity_id, now)
+                continue  # Skip numeric-only checks below
+
+            # -----------------------------------------------------------------
+            # Numeric battery sensor (percentage-based)
+            # -----------------------------------------------------------------
 
             # Update history
             history = self._history.setdefault(entity_id, [])
@@ -337,17 +382,12 @@ class BatteryStatusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             cutoff = (now - timedelta(hours=max(drop_timeframe, 48) + 1)).isoformat()
             self._history[entity_id] = [(ts, lvl) for ts, lvl in history if ts > cutoff]
 
-            if not notification_services:
-                continue
-
             forecast_days = _estimate_days_remaining(self._history[entity_id], level)
 
             # --- Warning threshold ---
             if enable_low:
                 last_warned_at = self._warning_notified_at.get(entity_id, "")
                 if level < low_threshold:
-                    # If critical is active and the battery is already in critical
-                    # territory, suppress the warning — the critical alert covers it.
                     in_critical_zone = enable_critical and level < critical_threshold
                     if not in_critical_zone:
                         should_notify = False
