@@ -403,7 +403,7 @@ class BatteryStatusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
                                 notification_services,
                                 notification_title,
                                 f"⚠️ {name}: Batteriestand bei {level:.0f}%"
-                                f" (Schwelle: {low_threshold}%)"
+                                f" (Schwelle: {low_threshold:.0f}%)"
                                 f"{_forecast_suffix(forecast_days)}",
                             )
                 elif level >= (low_threshold + LOW_BATTERY_HYSTERESIS) and last_warned_at:
@@ -427,7 +427,7 @@ class BatteryStatusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
                             notification_services,
                             notification_title,
                             f"🚨 {name}: Batteriestand KRITISCH bei {level:.0f}%"
-                            f" (Schwelle: {critical_threshold}%)"
+                            f" (Schwelle: {critical_threshold:.0f}%)"
                             f"{_forecast_suffix(forecast_days)}",
                         )
                 elif level >= (critical_threshold + CRITICAL_HYSTERESIS) and last_critical_at:
@@ -564,10 +564,10 @@ class BatteryStatusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             "📊 Wöchentlicher Batteriebericht",
             "━━━━━━━━━━━━━━━━━━━━━━",
             f"Überwachte Batterien: {total}",
-            f"Unter Warnschwelle ({low_threshold}%): {below_warning}",
+            f"Unter Warnschwelle ({low_threshold:.0f}%): {below_warning}",
         ]
         if enable_critical:
-            lines.append(f"Unter kritischer Schwelle ({critical_threshold}%): {below_critical}")
+            lines.append(f"Unter kritischer Schwelle ({critical_threshold:.0f}%): {below_critical}")
         lines.append(f"Diese Woche geladen/gewechselt: {recoveries}")
 
         if forecast_list:
