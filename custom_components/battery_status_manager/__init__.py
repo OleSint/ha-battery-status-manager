@@ -26,10 +26,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # DataUpdateCoordinator only auto-reschedules when listeners are registered.
     # Since this integration has no HA entities, there are no listeners, so the
     # coordinator would never run again on its own. Schedule it explicitly.
+    # async_track_time_interval passes a datetime argument to the callback,
+    # which async_request_refresh does not accept — wrap it.
+    async def _scheduled_refresh(_now: object) -> None:
+        await coordinator.async_request_refresh()
+
     entry.async_on_unload(
         async_track_time_interval(
             hass,
-            coordinator.async_request_refresh,
+            _scheduled_refresh,
             timedelta(seconds=DEFAULT_SCAN_INTERVAL),
         )
     )
