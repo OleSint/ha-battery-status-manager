@@ -302,6 +302,7 @@ class BatteryStatusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         )
 
         result: dict[str, Any] = {}
+        stale_entity_ids: list[str] = []
 
         enable_unavailable: bool = config.get(CONF_ENABLE_UNAVAILABLE_NOTIFICATION, DEFAULT_ENABLE_UNAVAILABLE)
         unavailable_hours: int = int(config.get(CONF_UNAVAILABLE_HOURS, DEFAULT_UNAVAILABLE_HOURS))
@@ -310,11 +311,10 @@ class BatteryStatusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             state = self.hass.states.get(entity_id)
             if not state:
                 _LOGGER.warning(
-                    "Monitored entity '%s' not found in Home Assistant. "
-                    "It may have been renamed or removed. "
-                    "Please reconfigure the integration.",
+                    "Monitored entity '%s' not found in Home Assistant — removing from config.",
                     entity_id,
                 )
+                stale_entity_ids.append(entity_id)
                 continue
             if state.state in ("unavailable", "unknown", ""):
                 continue
@@ -486,6 +486,16 @@ class BatteryStatusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
 
         # --- Weekly report ---
         await self._maybe_send_weekly_report(now, config, entity_ids, notification_services, notification_title)
+
+        # Auto-remove stale entity IDs from config (scope: by_entity only)
+        if stale_entity_ids and config.get(CONF_SCOPE) == SCOPE_BY_ENTITY:
+            current_ids: list[str] = list(config.get(CONF_MONITORED_ENTITIES, []))
+            updated_ids = [eid for eid in current_ids if eid not in stale_entity_ids]
+            if updated_ids != current_ids:
+                new_options = dict(self._entry.options)
+                new_options[CONF_MONITORED_ENTITIES] = updated_ids
+                self.hass.config_entries.async_update_entry(self._entry, options=new_options)
+                self.update_config(self._entry)
 
         await self._async_save_store()
         return result
