@@ -66,6 +66,7 @@ from .const import (
     MIN_FORECAST_POINTS,
     SCOPE_ALL,
     SCOPE_BY_DEVICE,
+    SCOPE_BY_ENTITY,
     STORAGE_KEY,
     STORAGE_VERSION,
 )
