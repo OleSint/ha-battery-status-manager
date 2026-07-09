@@ -6,6 +6,16 @@ A Home Assistant custom integration that monitors battery levels across your dev
 [![GitHub release](https://img.shields.io/github/v/release/OleSint/ha-battery-status-manager)](https://github.com/OleSint/ha-battery-status-manager/releases)
 
 ---
+## ☕ Support this project
+
+If this integration saves you time, consider supporting its development:
+
+[![GitHub Sponsors](https://img.shields.io/badge/Sponsor-%E2%9D%A4-red?logo=github)](https://github.com/sponsors/OleSint)
+
+This project is and will remain free and open source.
+--- 
+<br>
+---
 
 ## English
 
