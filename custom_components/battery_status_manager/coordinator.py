@@ -175,6 +175,8 @@ class BatteryStatusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         self._last_seen: dict[str, str] = {}
         # ISO timestamp of last sent unavailable notification ("" = not notified)
         self._unavailable_notified: dict[str, str] = {}
+        # Consecutive "not found" counter per entity — only remove after 3 misses
+        self._not_found_count: dict[str, int] = {}
 
         self._store_loaded = False
 
@@ -311,12 +313,23 @@ class BatteryStatusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         for entity_id in entity_ids:
             state = self.hass.states.get(entity_id)
             if not state:
-                _LOGGER.warning(
-                    "Monitored entity '%s' not found in Home Assistant — removing from config.",
-                    entity_id,
-                )
-                stale_entity_ids.append(entity_id)
+                count = self._not_found_count.get(entity_id, 0) + 1
+                self._not_found_count[entity_id] = count
+                if count >= 3:
+                    _LOGGER.warning(
+                        "Monitored entity '%s' not found in Home Assistant for %d consecutive checks — removing from config.",
+                        entity_id,
+                        count,
+                    )
+                    stale_entity_ids.append(entity_id)
+                else:
+                    _LOGGER.debug(
+                        "Monitored entity '%s' not found (check %d/3).",
+                        entity_id,
+                        count,
+                    )
                 continue
+            self._not_found_count[entity_id] = 0
             if state.state in ("unavailable", "unknown", ""):
                 continue
 
