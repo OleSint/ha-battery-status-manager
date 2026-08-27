@@ -24,6 +24,7 @@ CONF_WEEKLY_REPORT_DAY = "weekly_report_day"
 CONF_WEEKLY_REPORT_TIME = "weekly_report_time"
 CONF_ENABLE_UNAVAILABLE_NOTIFICATION = "enable_unavailable_notification"
 CONF_UNAVAILABLE_HOURS = "unavailable_hours"
+CONF_NOTIFY_TARGET = "notify_target"
 
 SCOPE_ALL = "all"
 SCOPE_BY_DEVICE = "by_device"

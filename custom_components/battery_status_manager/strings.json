@@ -61,6 +61,7 @@
         "data": {
           "notification_services": "Benachrichtigungsdienste",
           "notification_title": "Betreff / Titel der Benachrichtigung",
+          "notify_target": "Benachrichtigungsziel (optional)",
           "enable_time_window": "Nur in einem bestimmten Zeitfenster benachrichtigen",
           "time_window_start": "Beginn des Zeitfensters",
           "time_window_end": "Ende des Zeitfensters",
@@ -74,7 +75,8 @@
         "data_description": {
           "reminder_interval": "Wie viele Stunden zwischen Erinnerungen gewartet werden soll.",
           "enable_weekly_report": "Sendet einmal pro Woche eine Zusammenfassung aller überwachten Batterien.",
-          "weekly_report_time": "Uhrzeit, zu der der Wochenbericht gesendet wird."
+          "weekly_report_time": "Uhrzeit, zu der der Wochenbericht gesendet wird.",
+          "notify_target": "Optionales Ziel für den Benachrichtigungsdienst (z. B. eine Telegram-Chat-ID). Nur nötig, wenn der Dienst mehrere Empfaenger buendelt und du nur einen ansprechen moechtest."
         }
       }
     },
@@ -150,6 +152,7 @@
         "data": {
           "notification_services": "Benachrichtigungsdienste",
           "notification_title": "Betreff / Titel der Benachrichtigung",
+          "notify_target": "Benachrichtigungsziel (optional)",
           "enable_time_window": "Nur in einem bestimmten Zeitfenster benachrichtigen",
           "time_window_start": "Beginn des Zeitfensters",
           "time_window_end": "Ende des Zeitfensters",

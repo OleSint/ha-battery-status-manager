@@ -40,6 +40,7 @@ from .const import (
     CONF_MONITORED_ENTITIES,
     CONF_NOTIFICATION_SERVICES,
     CONF_NOTIFICATION_TITLE,
+    CONF_NOTIFY_TARGET,
     CONF_REMINDER_INTERVAL,
     CONF_SCOPE,
     CONF_TIME_WINDOW_END,
@@ -287,6 +288,10 @@ def _notifications_schema(
         vol.Optional(
             CONF_NOTIFICATION_TITLE,
             default=data.get(CONF_NOTIFICATION_TITLE, DEFAULT_NOTIFICATION_TITLE),
+        ): TextSelector(TextSelectorConfig(type=TextSelectorType.TEXT)),
+        vol.Optional(
+            CONF_NOTIFY_TARGET,
+            default=data.get(CONF_NOTIFY_TARGET, ""),
         ): TextSelector(TextSelectorConfig(type=TextSelectorType.TEXT)),
         vol.Required(
             CONF_ENABLE_TIME_WINDOW,

@@ -61,6 +61,7 @@
         "data": {
           "notification_services": "Notification services",
           "notification_title": "Notification title",
+          "notify_target": "Notification target (optional)",
           "enable_time_window": "Only send notifications within a specific time window",
           "time_window_start": "Time window start",
           "time_window_end": "Time window end",
@@ -74,7 +75,8 @@
         "data_description": {
           "reminder_interval": "How many hours to wait between reminders.",
           "enable_weekly_report": "Sends a weekly summary of all monitored batteries once per week.",
-          "weekly_report_time": "Time of day at which the weekly report is sent."
+          "weekly_report_time": "Time of day at which the weekly report is sent.",
+          "notify_target": "Optional target for the notification service (e.g. a Telegram chat ID). Only needed if the service bundles multiple recipients and you want to reach just one."
         }
       }
     },
@@ -150,6 +152,7 @@
         "data": {
           "notification_services": "Notification services",
           "notification_title": "Notification title",
+          "notify_target": "Notification target (optional)",
           "enable_time_window": "Only send notifications within a specific time window",
           "time_window_start": "Time window start",
           "time_window_end": "Time window end",
@@ -163,7 +166,8 @@
         "data_description": {
           "reminder_interval": "How many hours to wait between reminders.",
           "enable_weekly_report": "Sends a weekly summary of all monitored batteries once per week.",
-          "weekly_report_time": "Time of day at which the weekly report is sent."
+          "weekly_report_time": "Time of day at which the weekly report is sent.",
+          "notify_target": "Optional target for the notification service (e.g. a Telegram chat ID). Only needed if the service bundles multiple recipients and you want to reach just one."
         }
       }
     },

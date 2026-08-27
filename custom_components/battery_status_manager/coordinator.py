@@ -25,6 +25,7 @@ from .const import (
     CONF_ENABLE_UNAVAILABLE_NOTIFICATION,
     CONF_ENABLE_WEEKLY_REPORT,
     CONF_EXCLUDED_ENTITIES,
+    CONF_NOTIFY_TARGET,
     CONF_LOW_BATTERY_THRESHOLD,
     CONF_MONITORED_DEVICES,
     CONF_MONITORED_ENTITIES,
@@ -612,12 +613,17 @@ class BatteryStatusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     # ------------------------------------------------------------------
 
     async def _send_notifications(self, services: list[str], title: str, message: str) -> None:
+        config = self._get_config()
+        target = str(config.get(CONF_NOTIFY_TARGET, "")).strip()
         for service in services:
             try:
+                service_data: dict = {"title": title, "message": message}
+                if target:
+                    service_data["target"] = target
                 await self.hass.services.async_call(
                     "notify",
                     service,
-                    {"title": title, "message": message},
+                    service_data,
                     blocking=False,
                 )
             except Exception as err:
