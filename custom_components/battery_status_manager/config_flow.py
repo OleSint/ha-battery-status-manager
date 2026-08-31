@@ -263,10 +263,12 @@ def _notifications_schema(
     service_options: list[dict[str, str]],
     data: dict[str, Any],
 ) -> vol.Schema:
+    valid_services = {o["value"] for o in service_options}
+    current_services = [s for s in data.get(CONF_NOTIFICATION_SERVICES, []) if s in valid_services]
     return vol.Schema({
         vol.Required(
             CONF_NOTIFICATION_SERVICES,
-            default=data.get(CONF_NOTIFICATION_SERVICES, []),
+            default=current_services,
         ): SelectSelector(SelectSelectorConfig(
             options=service_options,
             multiple=True,
