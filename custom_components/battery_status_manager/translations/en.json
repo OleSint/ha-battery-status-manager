@@ -1,4 +1,30 @@
 {
+  "selector": {
+    "monitoring_scope": {
+      "options": {
+        "all": "All battery entities",
+        "by_device": "By device",
+        "by_entity": "By entity"
+      }
+    },
+    "grace_period": {
+      "options": {
+        "12": "12 hours",
+        "24": "24 hours"
+      }
+    },
+    "day_of_week": {
+      "options": {
+        "mon": "Monday",
+        "tue": "Tuesday",
+        "wed": "Wednesday",
+        "thu": "Thursday",
+        "fri": "Friday",
+        "sat": "Saturday",
+        "sun": "Sunday"
+      }
+    }
+  },
   "config": {
     "step": {
       "user": {

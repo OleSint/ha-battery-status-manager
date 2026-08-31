@@ -76,15 +76,7 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
-_DAY_OPTIONS = [
-    {"value": "mon", "label": "Monday"},
-    {"value": "tue", "label": "Tuesday"},
-    {"value": "wed", "label": "Wednesday"},
-    {"value": "thu", "label": "Thursday"},
-    {"value": "fri", "label": "Friday"},
-    {"value": "sat", "label": "Saturday"},
-    {"value": "sun", "label": "Sunday"},
-]
+_DAY_OPTIONS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
 
 # ---------------------------------------------------------------------------
 # Helper utilities
@@ -145,11 +137,8 @@ def _scope_schema(current: str = SCOPE_ALL) -> vol.Schema:
     return vol.Schema({
         vol.Required(CONF_SCOPE, default=current): SelectSelector(
             SelectSelectorConfig(
-                options=[
-                    {"value": SCOPE_ALL, "label": "Alle Batterieentitäten"},
-                    {"value": SCOPE_BY_DEVICE, "label": "Auswahl nach Gerät"},
-                    {"value": SCOPE_BY_ENTITY, "label": "Auswahl nach Entität"},
-                ],
+                options=[SCOPE_ALL, SCOPE_BY_DEVICE, SCOPE_BY_ENTITY],
+                translation_key="monitoring_scope",
                 mode=SelectSelectorMode.LIST,
             )
         ),
@@ -263,10 +252,8 @@ def _thresholds_schema(data: dict[str, Any]) -> vol.Schema:
             CONF_UNAVAILABLE_HOURS,
             default=data.get(CONF_UNAVAILABLE_HOURS, DEFAULT_UNAVAILABLE_HOURS),
         ): SelectSelector(SelectSelectorConfig(
-            options=[
-                {"value": "12", "label": "12 Stunden"},
-                {"value": "24", "label": "24 Stunden"},
-            ],
+            options=["12", "24"],
+            translation_key="grace_period",
             mode=SelectSelectorMode.LIST,
         )),
     })
@@ -310,6 +297,7 @@ def _notifications_schema(
             default=data.get(CONF_ACTIVE_DAYS, DEFAULT_ACTIVE_DAYS),
         ): SelectSelector(SelectSelectorConfig(
             options=_DAY_OPTIONS,
+            translation_key="day_of_week",
             multiple=True,
             mode=SelectSelectorMode.LIST,
         )),
@@ -334,6 +322,7 @@ def _notifications_schema(
             default=data.get(CONF_WEEKLY_REPORT_DAY, DEFAULT_WEEKLY_REPORT_DAY),
         ): SelectSelector(SelectSelectorConfig(
             options=_DAY_OPTIONS,
+            translation_key="day_of_week",
             mode=SelectSelectorMode.LIST,
         )),
         vol.Optional(
