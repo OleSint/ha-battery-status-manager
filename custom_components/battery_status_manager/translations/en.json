@@ -1,4 +1,20 @@
 {
+  "entity": {
+    "sensor": {
+      "monitored": {
+        "name": "Monitored Batteries"
+      },
+      "below_warning": {
+        "name": "Batteries Below Warning"
+      },
+      "below_critical": {
+        "name": "Batteries Below Critical"
+      },
+      "unavailable": {
+        "name": "Unavailable Batteries"
+      }
+    }
+  },
   "selector": {
     "monitoring_scope": {
       "options": {

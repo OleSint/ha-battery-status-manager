@@ -1,4 +1,20 @@
 {
+  "entity": {
+    "sensor": {
+      "monitored": {
+        "name": "Überwachte Batterien"
+      },
+      "below_warning": {
+        "name": "Batterien unter Warnschwelle"
+      },
+      "below_critical": {
+        "name": "Batterien unter kritischer Schwelle"
+      },
+      "unavailable": {
+        "name": "Nicht erreichbare Batterien"
+      }
+    }
+  },
   "selector": {
     "monitoring_scope": {
       "options": {
