@@ -7,6 +7,8 @@ from typing import Any
 from homeassistant.components.sensor import SensorDeviceClass
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import area_registry as ar
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.storage import Store
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
@@ -80,6 +82,23 @@ _EPOCH = "1970-01-01T00:00:00+00:00"
 # ---------------------------------------------------------------------------
 # Helper functions
 # ---------------------------------------------------------------------------
+
+def _get_area_suffix(hass: HomeAssistant, entity_id: str) -> str:
+    """Return ' (Area)' if the entity or its device belongs to an area, else ''."""
+    entity_reg = er.async_get(hass)
+    entry = entity_reg.async_get(entity_id)
+    if not entry:
+        return ""
+    area_id = entry.area_id
+    if not area_id and entry.device_id:
+        device = dr.async_get(hass).async_get(entry.device_id)
+        if device:
+            area_id = device.area_id
+    if not area_id:
+        return ""
+    area = ar.async_get(hass).async_get_area(area_id)
+    return f" ({area.name})" if area else ""
+
 
 def _is_within_time_window(start_str: str, end_str: str) -> bool:
     now: time = dt_util.now().time().replace(second=0, microsecond=0)
@@ -334,7 +353,7 @@ class BatteryStatusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             if state.state in ("unavailable", "unknown", ""):
                 continue
 
-            name: str = state.attributes.get("friendly_name", entity_id)
+            name: str = state.attributes.get("friendly_name", entity_id) + _get_area_suffix(self.hass, entity_id)
 
             # Determine if this is a numeric (%) or binary (on/off) battery sensor
             try:
@@ -490,7 +509,7 @@ class BatteryStatusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
                     continue  # Already notified
                 if not notifications_allowed:
                     continue
-                name = state.attributes.get("friendly_name", entity_id)
+                name = state.attributes.get("friendly_name", entity_id) + _get_area_suffix(self.hass, entity_id)
                 self._unavailable_notified[entity_id] = now.isoformat()
                 await self._send_notifications(
                     notification_services,
@@ -569,7 +588,7 @@ class BatteryStatusCoordinator(DataUpdateCoordinator[dict[str, Any]]):
                 continue
 
             total += 1
-            name: str = state.attributes.get("friendly_name", entity_id)
+            name: str = state.attributes.get("friendly_name", entity_id) + _get_area_suffix(self.hass, entity_id)
 
             if level < low_threshold:
                 below_warning += 1
