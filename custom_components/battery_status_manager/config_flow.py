@@ -7,7 +7,7 @@ import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.components.sensor import SensorDeviceClass
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers import device_registry as dr, entity_registry as er
+from homeassistant.helpers import area_registry as ar, device_registry as dr, entity_registry as er
 from homeassistant.helpers.selector import (
     BooleanSelector,
     NumberSelector,
@@ -82,8 +82,16 @@ _DAY_OPTIONS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
 # Helper utilities
 # ---------------------------------------------------------------------------
 
+def _get_area_label(hass: HomeAssistant, area_id: str | None) -> str:
+    if not area_id:
+        return ""
+    area = ar.async_get(hass).async_get_area(area_id)
+    return f" [{area.name}]" if area else ""
+
+
 def _get_battery_entities(hass: HomeAssistant) -> list[dict[str, str]]:
     entity_reg = er.async_get(hass)
+    device_reg = dr.async_get(hass)
     options: list[dict[str, str]] = []
     for entry in entity_reg.entities.values():
         if (
@@ -101,6 +109,12 @@ def _get_battery_entities(hass: HomeAssistant) -> list[dict[str, str]]:
                     except (ValueError, TypeError):
                         if state.state == "on":
                             label = f"{label} (LOW_BAT)"
+            area_id = entry.area_id
+            if not area_id and entry.device_id:
+                device = device_reg.async_get(entry.device_id)
+                if device:
+                    area_id = device.area_id
+            label += _get_area_label(hass, area_id)
             options.append({"value": entry.entity_id, "label": label})
     return sorted(options, key=lambda x: x["label"].lower())
 
@@ -120,6 +134,7 @@ def _get_battery_devices(hass: HomeAssistant) -> list[dict[str, str]]:
         device = device_reg.async_get(device_id)
         if device:
             name = device.name_by_user or device.name or device_id
+            name += _get_area_label(hass, device.area_id)
             options.append({"value": device_id, "label": name})
     return sorted(options, key=lambda x: x["label"].lower())
 
